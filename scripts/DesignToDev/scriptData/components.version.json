@@ -1,6 +1,6 @@
 {
   "figmaFileKey": "0fNPEupARJhWxly5BBWOno",
-  "figmaVersion": "2401912541341934831",
+  "figmaVersion": "2401912541341934830",
   "lastModified": "2026-09-22T05:26:19Z",
   "updatedAt": "2026-09-22T07:08:37.964Z",
   "components": [
@@ -307,36 +307,6 @@
       "targetDir": "src/components/NavigationBar"
     },
     {
-      "name": "Notice Card",
-      "nodeId": "484:520",
-      "page": "Components",
-      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=484-520&m=dev",
-      "figmaHash": "7f033bfcd0e0eb48",
-      "width": 374,
-      "height": 359,
-      "variantProps": {},
-      "variants": [
-        {
-          "name": "Notice Card",
-          "nodeId": "484:520",
-          "props": {},
-          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=484-520&m=dev",
-          "width": 374,
-          "height": 359
-        }
-      ],
-      "dependsOn": [
-        "Button"
-      ],
-      "description": "",
-      "codeStatus": "created",
-      "builtAgainstHash": "7f033bfcd0e0eb48",
-      "builtAt": "2026-09-22T07:11:36.637Z",
-      "builtWithModel": "claude-opus-5",
-      "targetDir": "src/components/NoticeCard",
-      "docsBuiltAgainstHash": "7f033bfcd0e0eb48"
-    },
-    {
       "name": "Product Card",
       "nodeId": "5:162",
       "page": "Components",
@@ -431,34 +401,6 @@
       "builtAt": "2026-09-17T04:04:28.770Z",
       "builtWithModel": "claude-sonnet-5",
       "targetDir": "src/components/atoms/SearchBar"
-    },
-    {
-      "name": "Toster",
-      "nodeId": "488:527",
-      "page": "Components",
-      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=488-527&m=dev",
-      "figmaHash": "e1c78132d4086446",
-      "width": 296,
-      "height": 88,
-      "variantProps": {},
-      "variants": [
-        {
-          "name": "Toster",
-          "nodeId": "488:527",
-          "props": {},
-          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=488-527&m=dev",
-          "width": 296,
-          "height": 88
-        }
-      ],
-      "dependsOn": [],
-      "description": "",
-      "codeStatus": "created",
-      "builtAgainstHash": "e1c78132d4086446",
-      "builtAt": "2026-09-22T07:14:50.267Z",
-      "builtWithModel": "claude-sonnet-5",
-      "targetDir": "src/components/Toster",
-      "docsBuiltAgainstHash": "e1c78132d4086446"
     }
   ]
 }

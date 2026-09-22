@@ -33,10 +33,12 @@ interface Run {
 }
 
 function run(cmd: string, args: string[]): Run {
+  // No shell: git/gh are real executables, and routing them through cmd.exe
+  // on Windows re-tokenizes the argument array by whitespace — a multi-word
+  // commit title/body would get shredded into bogus extra arguments.
   const r = spawnSync(cmd, args, {
     cwd: ROOT_DIR,
     encoding: "utf-8",
-    shell: process.platform === "win32",
   });
   return {
     ok: r.status === 0,
@@ -216,15 +218,16 @@ export function shipUnit(cfg: GitConfig, state: RepoState, branch: string, unit:
   const committed = git("commit", "-m", unit.title, "-m", unit.body);
   if (!committed.ok) {
     res.reason = `nothing committed: ${committed.out || committed.err}`;
-    git("switch", state.baseBranch);
-    git("branch", "-D", branch);
+    abandonUnit(cfg, state, branch);
     return res;
   }
 
   const pushed = git("push", "-u", cfg.remote, branch);
   if (!pushed.ok) {
     res.reason = `push failed: ${pushed.err || pushed.out}`;
-    git("switch", state.baseBranch);
+    // The commit succeeded locally but never left this machine — not worth
+    // keeping, and leaving it would carry these files onto base on switch.
+    abandonUnit(cfg, state, branch);
     return res;
   }
   res.pushed = true;
