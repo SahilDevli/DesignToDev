@@ -1,0 +1,46 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as TosterStories from './Toster.stories';
+
+<Meta of={TosterStories} />
+
+# Toster
+
+A success toast: a white 296×88 box with a green border and a centered
+message. Use it to confirm that an action (e.g. login) completed.
+
+<Canvas of={TosterStories.Default} />
+
+<Controls />
+
+## Variants
+
+### Toster
+
+Figma defines one variant: `--colors-neutral-100` background, 4px `--colors-tertiary-700` border, 13px radius, 24px medium `--colors-tertiary-700` centered message.
+
+<Canvas of={TosterStories.Default} />
+
+## Usage
+
+```tsx
+import { Toster } from '../components/Toster/Toster';
+
+<Toster message="Login Successful!" />
+```
+
+## Responsive
+
+- Below 768px the toast's width switches from the fixed 296px to `100%` so it fills a narrower parent, and padding switches from the literal 28px/40px to `--spacing-8`/`--spacing-9` (20px/24px).
+- The message font-size uses `clamp(18px, 5vw, 24px)` at every width, so a longer custom `message` never overflows a narrow container.
+- `min-height: 88px` lets a longer message grow the toast instead of clipping it.
+
+## Accessibility
+
+- The root has `role="status"` and `aria-live="polite"` so assistive tech announces the message when it appears or changes.
+
+## Assumptions
+
+- The 13px radius, 4px border and 24px message font-size have no matching token in `designToken.css` and are literal values.
+- Figma's absolute text inset is reproduced with `display:flex; align-items:center; justify-content:center` instead of exact pixel offsets, so the message stays centered as it wraps.
+- Figma shows no interaction or prototype for the toast; `role="status"` / `aria-live="polite"` is a conventional accessible pattern added in code, not a Figma-specified state.
+- The mobile width/padding change and the `clamp()` font-size are code decisions to keep the fixed 296px design usable down to 375px; they are not in the Figma file.

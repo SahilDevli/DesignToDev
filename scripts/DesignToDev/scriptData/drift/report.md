@@ -1,6 +1,6 @@
 ## driftDetection — ✅ PASS
 
-2026-09-22T07:15:03.737Z · file `0fNPEupARJhWxly5BBWOno` · components 2× @ 11.00% · pages 1× @ 25.00% (report-only)
+2026-09-22T09:37:58.805Z · file `0fNPEupARJhWxly5BBWOno` · components 2× @ 11.00% · pages 1× @ 25.00% (report-only)
 
 **12 passed · 0 failed · 15 no-story · 0 errored** (of 27)
 
@@ -21,7 +21,7 @@
 | component | Input | State=Disabled | ⚠️ no-story | 0.00% | 280px | — |
 | component | Input | State=Error | ⚠️ no-story | 0.00% | 280px | — |
 | component | Search Bar | Property 1=Default | ⚠️ no-story | 0.00% | 574px | — |
-| component | Toster | Toster | ✅ pass | 9.08% | 296px | — |
+| component | Toster | Toster | ✅ pass | 9.09% | 296px | +0×+8 |
 | page | ProductPage | desktop | ✅ pass | 7.85% | 1440px | +0×+37 |
 | component | Search Bar | Focus | ✅ pass | 5.68% | 574px | — |
 | component | Notice Card | Notice Card | ✅ pass | 3.78% | 374px | — |
