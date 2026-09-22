@@ -1,18 +1,18 @@
 /**
- * lib/git.ts — branch, commit, push and open a PR for generated work.
+ * lib/git.ts — branch, commit, push and open a PR for one unit of generated work.
  *
  * Contract the pipelines rely on:
  *   - Nothing here runs unless the repo is in a fit state (real repo, a remote,
- *     a named branch). Every precondition failure is reported and skipped, never
- *     forced.
- *   - Files that were ALREADY dirty before the run are never staged. The dev's
- *     in-progress work is not ours to commit.
- *   - One branch and one PR per unit (component / page / the token sheet).
- *   - The run is atomic: if any unit fails the drift gate, NO branch and NO PR
- *     is created for any of them — everything is left in the working tree.
- *
- * End state of a successful flow: you are back on the base branch with a clean
- * tree, and each unit's work lives on its own pushed branch behind its own PR.
+ *     a named branch, a CLEAN working tree). Every precondition failure is
+ *     reported and the whole run is aborted before anything is generated —
+ *     never forced, never worked around.
+ *   - One branch and one PR per unit (component / page / the token sheet),
+ *     built and shipped in full before the next unit's branch is cut:
+ *     branch off base → generate → commit everything → push → open the PR →
+ *     back to base → repeat.
+ *   - A unit that fails its own gate (build failure, drift over threshold) is
+ *     abandoned on its own — its branch is discarded and the working tree is
+ *     reset to base — it never blocks any other unit.
  *
  * PRs are opened with the GitHub CLI (`gh pr create`). If `gh` is missing or not
  * authenticated the branch is still pushed and the compare URL is printed, so no
@@ -55,14 +55,8 @@ export interface GitConfig {
   baseBranch: string;
   branchPrefix: string;
   remote: string;
-  /** A unit whose worst drift reaches this percentage blocks the whole run. */
+  /** A unit whose worst drift reaches this percentage is abandoned — no branch, no PR. */
   maxDriftPercent: number;
-  /**
-   * Generated pipeline state. Excluded by default: it is one file per pipeline
-   * that every unit touches, so including it would make every PR after the
-   * first conflict with its siblings.
-   */
-  excludePaths: string[];
   draft: boolean;
 }
 
@@ -71,7 +65,6 @@ export const defaultGitConfig = (): GitConfig => ({
   branchPrefix: "design",
   remote: "origin",
   maxDriftPercent: 20,
-  excludePaths: ["scripts/DesignToDev/scriptData/"],
   draft: false,
 });
 
@@ -81,7 +74,6 @@ export function loadGitConfig(raw: Partial<GitConfig> | undefined): GitConfig {
   if (!Number.isFinite(cfg.maxDriftPercent) || cfg.maxDriftPercent <= 0) {
     cfg.maxDriftPercent = d.maxDriftPercent;
   }
-  if (!Array.isArray(cfg.excludePaths)) cfg.excludePaths = d.excludePaths;
   return cfg;
 }
 
@@ -94,6 +86,12 @@ export interface RepoState {
   hasGh: boolean;
 }
 
+/**
+ * Checks the repo is fit to branch from, requires a CLEAN working tree (so no
+ * unit's `git add .` can ever sweep up unrelated work), and switches to the
+ * base branch once so every unit starts from the same confirmed-clean spot.
+ * Call this ONCE per run, before generating anything.
+ */
 export function inspectRepo(cfg: GitConfig): RepoState {
   const none = { usable: false, baseBranch: "", hasGh: false };
 
@@ -117,59 +115,26 @@ export function inspectRepo(cfg: GitConfig): RepoState {
     return { ...none, reason: "HEAD is detached — check out a branch first" };
   }
 
+  const status = git("status", "--porcelain");
+  if (!status.ok) {
+    return { ...none, reason: "could not read working-tree status" };
+  }
+  if (status.out.length > 0) {
+    return {
+      ...none,
+      reason:
+        "working tree is not clean — commit or stash your changes before running the pipeline",
+    };
+  }
+
+  const switched = git("switch", branch);
+  if (!switched.ok) {
+    return { ...none, reason: `could not switch to base branch "${branch}": ${switched.err}` };
+  }
+
   // gh is optional: without it we still push and print the compare URL.
   const hasGh = run("gh", ["--version"]).ok && run("gh", ["auth", "status"]).ok;
   return { usable: true, baseBranch: branch, hasGh };
-}
-
-// ─── Working-tree inspection ───────────────────────────────────────────────
-
-/**
- * Repo-relative paths git currently reports as changed, including untracked.
- * Renames are reported as their destination path, which is what we want to stage.
- */
-export function changedPaths(): Set<string> {
-  const r = git("status", "--porcelain=v1", "-z", "--untracked-files=all");
-  if (!r.ok) return new Set();
-  const out = new Set<string>();
-  // NUL-separated; a rename entry is "XY old\0new\0", so the code must consume
-  // the extra field or every later path shifts by one.
-  const parts = r.out.split("\0").filter((p) => p.length > 0);
-  for (let i = 0; i < parts.length; i++) {
-    const entry = parts[i];
-    const code = entry.slice(0, 2);
-    const p = entry.slice(3);
-    if (code[0] === "R" || code[1] === "R") {
-      out.add(p);
-      i++; // skip the rename's source path
-      continue;
-    }
-    out.add(p);
-  }
-  return out;
-}
-
-const isExcluded = (p: string, cfg: GitConfig): boolean =>
-  cfg.excludePaths.some((x) => p.replace(/\\/g, "/").startsWith(x.replace(/\\/g, "/")));
-
-/**
- * Paths that appeared or changed between two snapshots, minus anything that was
- * already dirty before the run and anything configured as excluded.
- */
-export function attributePaths(
-  before: Set<string>,
-  after: Set<string>,
-  preexisting: Set<string>,
-  cfg: GitConfig
-): string[] {
-  const out: string[] = [];
-  for (const p of after) {
-    if (before.has(p)) continue;
-    if (preexisting.has(p)) continue;
-    if (isExcluded(p, cfg)) continue;
-    out.push(p);
-  }
-  return out.sort();
 }
 
 // ─── Branch / commit / push / PR ───────────────────────────────────────────
@@ -184,19 +149,40 @@ export const branchName = (cfg: GitConfig, kind: string, label: string): string 
   return `${cfg.branchPrefix}/${kind}-${slug}-${stamp}`;
 };
 
-export interface PrUnit {
-  /** "component" | "page" | "tokens" */
-  kind: string;
-  /** Display name — Button, Home Page, Design tokens. */
-  label: string;
-  /** Repo-relative paths this unit owns. */
-  paths: string[];
+export interface UnitBegin {
+  branch: string;
+  ok: boolean;
+  reason?: string;
+}
+
+/** Branch off base for one unit. Call right before generating that unit's files. */
+export function beginUnit(cfg: GitConfig, state: RepoState, kind: string, label: string): UnitBegin {
+  const branch = branchName(cfg, kind, label);
+  const created = git("switch", "-c", branch, state.baseBranch);
+  if (!created.ok) {
+    return { branch, ok: false, reason: `could not create branch: ${created.err || created.out}` };
+  }
+  return { branch, ok: true };
+}
+
+/**
+ * A unit that failed its own gate (build failure, drift over threshold): throw
+ * its branch and any generated files away, and land back on a clean base so
+ * the next unit starts from the same confirmed-clean spot.
+ */
+export function abandonUnit(cfg: GitConfig, state: RepoState, branch: string): void {
+  git("switch", state.baseBranch);
+  git("branch", "-D", branch);
+  git("checkout", "--", ".");
+  git("clean", "-fd");
+}
+
+export interface UnitInfo {
   title: string;
   body: string;
 }
 
 export interface PrResult {
-  label: string;
   branch: string;
   pushed: boolean;
   prUrl: string | null;
@@ -213,30 +199,21 @@ function compareUrl(cfg: GitConfig, branch: string): string | null {
 }
 
 /**
- * Branch from base, stage only this unit's paths, commit, push, open a PR, then
- * return to base. The working tree keeps every OTHER unit's changes, so the
- * caller can repeat this for each unit in turn.
+ * Stage and commit everything on the unit's current branch (there's nothing
+ * else in the tree by construction — the unit was branched off a clean base),
+ * push, open a PR, then return to base.
  */
-function shipUnit(unit: PrUnit, cfg: GitConfig, state: RepoState): PrResult {
-  const branch = branchName(cfg, unit.kind, unit.label);
-  const res: PrResult = { label: unit.label, branch, pushed: false, prUrl: null };
+export function shipUnit(cfg: GitConfig, state: RepoState, branch: string, unit: UnitInfo): PrResult {
+  const res: PrResult = { branch, pushed: false, prUrl: null };
 
-  const created = git("switch", "-c", branch, state.baseBranch);
-  if (!created.ok) {
-    res.reason = `could not create branch: ${created.err || created.out}`;
-    return res;
-  }
-
-  const staged = git("add", "--", ...unit.paths);
+  const staged = git("add", ".");
   if (!staged.ok) {
     res.reason = `could not stage files: ${staged.err}`;
-    git("switch", state.baseBranch);
-    git("branch", "-D", branch);
+    abandonUnit(cfg, state, branch);
     return res;
   }
 
-  // --only: commit exactly what we staged, never anything else in the tree.
-  const committed = git("commit", "--only", "-m", unit.title, "-m", unit.body, "--", ...unit.paths);
+  const committed = git("commit", "-m", unit.title, "-m", unit.body);
   if (!committed.ok) {
     res.reason = `nothing committed: ${committed.out || committed.err}`;
     git("switch", state.baseBranch);
@@ -282,67 +259,9 @@ function shipUnit(unit: PrUnit, cfg: GitConfig, state: RepoState): PrResult {
   return res;
 }
 
-export interface FlowInput {
-  units: PrUnit[];
-  /** Units held back by the drift gate: label → worst mismatch ratio. */
-  blocked: Array<{ label: string; worst: number }>;
-  cfg: GitConfig;
-}
-
-/**
- * Run the whole git flow for one pipeline run.
- *
- * The drift gate is checked FIRST and applies to the entire run: a single unit
- * over the threshold stops every branch and PR, because a half-shipped design
- * sync is harder to reason about than none at all.
- */
-export function runGitFlow(input: FlowInput): PrResult[] {
-  const { units, blocked, cfg } = input;
-
-  console.log("─".repeat(64));
-  log("🔀", "git flow");
-
-  if (units.length === 0) {
-    log("✓ ", "nothing was created or edited — no branch, no PR");
-    return [];
-  }
-
-  if (blocked.length > 0) {
-    log(
-      "🛑",
-      `visual regression gate: ${blocked.length} unit(s) at or above ${cfg.maxDriftPercent}% drift — ` +
-        "no branch and no PR for this run"
-    );
-    for (const b of blocked) {
-      log("  •", `${b.label} — ${(b.worst * 100).toFixed(2)}% (limit ${cfg.maxDriftPercent}%)`);
-    }
-    log(
-      "  ",
-      "All changes are left in the working tree. Fix the drift, re-run, and the " +
-        "flow will ship them."
-    );
-    return [];
-  }
-
-  const state = inspectRepo(cfg);
-  if (!state.usable) {
-    log("⚠️ ", `git flow skipped — ${state.reason}`);
-    log("  ", "Your generated files are untouched in the working tree.");
-    return [];
-  }
-  if (!state.hasGh) {
-    log("⚠️ ", "gh CLI not available/authenticated — branches will push, PRs need a click");
-  }
-  log("🌿", `base branch "${state.baseBranch}" · ${units.length} branch(es) to raise`);
-
-  const results: PrResult[] = [];
-  for (const unit of units) {
-    const r = shipUnit(unit, cfg, state);
-    results.push(r);
-    if (r.prUrl && !r.reason) log("✅", `${r.label} → ${r.prUrl}`);
-    else if (r.pushed) log("⚠️ ", `${r.label} → ${r.branch} pushed · ${r.reason ?? ""} ${r.prUrl ?? ""}`);
-    else log("❌", `${r.label} — ${r.reason}`);
-  }
-
-  return results;
+/** Log a `shipUnit` result the same way for every caller. */
+export function logShipResult(label: string, r: PrResult): void {
+  if (r.prUrl && !r.reason) log("✅", `${label} → ${r.prUrl}`);
+  else if (r.pushed) log("⚠️ ", `${label} → ${r.branch} pushed · ${r.reason ?? ""} ${r.prUrl ?? ""}`);
+  else log("❌", `${label} — ${r.reason}`);
 }

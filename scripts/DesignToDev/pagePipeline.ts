@@ -101,12 +101,15 @@ import { MDX_RULES, ensureStorybookSetup, verifyStorybookBuild } from "./lib/sto
 import { readPayload } from "./lib/driftReport.js";
 import { reportUsage, type UsageRow } from "./lib/usage.js";
 import {
-  attributePaths,
-  changedPaths,
+  abandonUnit,
+  beginUnit,
+  inspectRepo,
   loadGitConfig,
-  runGitFlow,
+  logShipResult,
+  shipUnit,
   type GitConfig,
-  type PrUnit,
+  type RepoState,
+  type UnitInfo,
 } from "./lib/git.js";
 import {
   BREAKPOINTS,
@@ -155,12 +158,6 @@ const CANVAS = (opt("--canvas") || PAGES_CANVAS).trim();
 const GIT_CFG: GitConfig = loadGitConfig(
   readJSON<{ git?: Partial<GitConfig> }>(path.join(ROOT_DIR, "package.json"))?.git
 );
-
-/**
- * Files already dirty when the run started. They belong to the developer, not to
- * this run, so they are never staged into a generated branch.
- */
-let PREEXISTING: Set<string> = new Set();
 
 // ═══════════════════════════════════════════════════════════════════════════
 // PHASE 1 — VERSION
@@ -848,26 +845,18 @@ interface BuildOutcome {
   skipped: number;
   docsFailed: number;
   usage: UsageRow[];
-  /** One PR unit per page that actually produced file changes. */
-  units: PrUnit[];
-  /** Pages whose worst drift reached the gate — these block the whole run. */
+  /** Pages shipped to their own branch + PR. */
+  shipped: string[];
+  /** Pages whose worst drift reached the gate — abandoned, not shipped. */
   blocked: Array<{ label: string; worst: number }>;
 }
 
-function prUnitFor(
-  p: PageEntry,
-  mode: "create" | "update",
-  paths: string[],
-  worst: number
-): PrUnit {
+function prUnitFor(p: PageEntry, mode: "create" | "update", worst: number): UnitInfo {
   const screens = p.screens
     .map((s) => `- ${s.breakpoint} — ${s.width}×${s.height}px`)
     .join("\n");
   const reuses = p.dependsOn.map((d) => `- ${d.name} ×${d.uses}`).join("\n");
   return {
-    kind: "page",
-    label: p.identifier,
-    paths,
     title: `${mode === "create" ? "feat" : "fix"}(${p.name}): ${
       mode === "create" ? "create" : "sync"
     } with Figma design`,
@@ -896,7 +885,8 @@ function prUnitFor(
 
 async function runBuildPhase(
   file: PagesVersionFile,
-  mode: "create" | "update"
+  mode: "create" | "update",
+  gitState: RepoState | null
 ): Promise<BuildOutcome> {
   console.log(`\n── Phase: ${mode} ────────────────────────────────────────────`);
   const out: BuildOutcome = {
@@ -905,7 +895,7 @@ async function runBuildPhase(
     skipped: 0,
     docsFailed: 0,
     usage: [],
-    units: [],
+    shipped: [],
     blocked: [],
   };
 
@@ -935,12 +925,23 @@ async function runBuildPhase(
 
   for (let i = 0; i < targets.length; i++) {
     const p = targets[i];
-    // Everything that changes from here to the end of this iteration is this
-    // page's work, and lands on its own branch.
-    const before = changedPaths();
 
     console.log("─".repeat(64));
     log(`[${i + 1}/${targets.length}]`, `${p.name} — ${mode}`);
+
+    // Branch off base before generating, so this page's work lands directly
+    // on its own branch. No branch in dry-run / --no-pr modes.
+    let branch: string | null = null;
+    if (!NO_PR && !DRY_RUN && gitState) {
+      const begun = beginUnit(GIT_CFG, gitState, "page", p.identifier);
+      if (!begun.ok) {
+        log("❌", `Page ${p.name} — ${begun.reason}`);
+        out.failed++;
+        continue;
+      }
+      branch = begun.branch;
+    }
+
     log(
       "📥",
       `Page ${p.name} fetched!  (node ${p.nodeId} · ${p.width}×${p.height} · ` +
@@ -975,6 +976,7 @@ async function runBuildPhase(
         console.error(
           `   ⚠️  no existing page files for "${p.name}" — skipping (run the create phase first).`
         );
+        if (branch && gitState) abandonUnit(GIT_CFG, gitState, branch);
         out.skipped++;
         continue;
       }
@@ -1007,6 +1009,7 @@ async function runBuildPhase(
     if (!success) {
       out.failed++;
       log("❌", `Page ${p.name} build failed (exit ${run.code}) — prompt kept at ${rel(promptPath)}`);
+      if (branch && gitState) abandonUnit(GIT_CFG, gitState, branch);
       continue;
     }
 
@@ -1063,21 +1066,20 @@ async function runBuildPhase(
       }
     }
 
-    // ── What this page actually wrote, for its own branch and PR ──
-    if (!NO_PR) {
-      const paths = attributePaths(before, changedPaths(), PREEXISTING, GIT_CFG);
-      if (paths.length === 0) {
-        log("ℹ️ ", `Page ${p.name} — no file changes to ship`);
-      } else if (!NO_DRIFT && worst * 100 >= GIT_CFG.maxDriftPercent) {
+    // ── Ship this page's branch on its own, right now ──
+    if (branch && gitState) {
+      if (!NO_DRIFT && worst * 100 >= GIT_CFG.maxDriftPercent) {
         out.blocked.push({ label: p.name, worst });
         log(
           "🛑",
           `Page ${p.name} — ${(worst * 100).toFixed(2)}% drift is at or over the ` +
-            `${GIT_CFG.maxDriftPercent}% gate; this blocks the whole run's PRs`
+            `${GIT_CFG.maxDriftPercent}% gate; branch abandoned, no PR`
         );
+        abandonUnit(GIT_CFG, gitState, branch);
       } else {
-        out.units.push(prUnitFor(p, mode, paths, worst));
-        log("📦", `Page ${p.name} — ${paths.length} file(s) ready to ship`);
+        const result = shipUnit(GIT_CFG, gitState, branch, prUnitFor(p, mode, worst));
+        logShipResult(`Page ${p.name}`, result);
+        if (result.prUrl && !result.reason) out.shipped.push(p.name);
       }
     }
   }
@@ -1097,9 +1099,26 @@ async function main(): Promise<void> {
   console.log(`\n=== Script 3 · pagePipeline (${phases}) ===`);
   if (DRY_RUN) log("🧪", "DRY RUN — no files written, no Claude calls, no drift detection");
 
-  // Before anything is built: make sure Storybook can render documentation, so
-  // the first generated .mdx has somewhere to go. Idempotent and silent on an
-  // already-configured project.
+  // Before anything is built: confirm the repo is fit to branch from (clean
+  // tree, a remote, a resolvable base branch) — fail fast rather than
+  // generating work we then can't ship.
+  let gitState: RepoState | null = null;
+  if (!NO_PR && !DRY_RUN && (DO_CREATE || DO_UPDATE)) {
+    gitState = inspectRepo(GIT_CFG);
+    if (!gitState.usable) {
+      console.error(`❌  git flow unusable — ${gitState.reason}`);
+      process.exitCode = 1;
+      return;
+    }
+    if (!gitState.hasGh) {
+      log("⚠️ ", "gh CLI not available/authenticated — branches will push, PRs need a click");
+    }
+    log("🌿", `base branch "${gitState.baseBranch}" — branching per page as each one builds`);
+  }
+
+  // Make sure Storybook can render documentation, so the first generated
+  // .mdx has somewhere to go. Idempotent and silent on an already-configured
+  // project.
   if (!NO_DOCS && (DO_CREATE || DO_UPDATE)) {
     ensureStorybookSetup({ dry: DRY_RUN, quiet: true });
   }
@@ -1132,7 +1151,7 @@ async function main(): Promise<void> {
     skipped: 0,
     docsFailed: 0,
     usage: [],
-    units: [],
+    shipped: [],
     blocked: [],
   };
   const merge = (o: BuildOutcome) => {
@@ -1140,17 +1159,13 @@ async function main(): Promise<void> {
     totals.failed += o.failed;
     totals.skipped += o.skipped;
     totals.docsFailed += o.docsFailed;
-    totals.units.push(...o.units);
+    totals.shipped.push(...o.shipped);
     totals.blocked.push(...o.blocked);
     totals.usage.push(...o.usage);
   };
 
-  // Snapshot the tree BEFORE the first build, so the developer's own in-progress
-  // edits are never swept into a generated branch.
-  if (!NO_PR && !DRY_RUN) PREEXISTING = changedPaths();
-
-  if (DO_CREATE) merge(await runBuildPhase(file, "create"));
-  if (DO_UPDATE) merge(await runBuildPhase(file, "update"));
+  if (DO_CREATE) merge(await runBuildPhase(file, "create", gitState));
+  if (DO_UPDATE) merge(await runBuildPhase(file, "update", gitState));
 
   reportUsage(totals.usage, "pages", "page", LOG_TOKEN_USAGE);
 
@@ -1162,15 +1177,12 @@ async function main(): Promise<void> {
     storybookOk = await verifyStorybookBuild();
   }
 
-  if (!NO_PR && !DRY_RUN) {
-    runGitFlow({ units: totals.units, blocked: totals.blocked, cfg: GIT_CFG });
-  }
-
   console.log("─".repeat(64));
   log(
     "📊",
     `done — ${totals.built} built · ${totals.failed} failed · ${totals.skipped} skipped` +
-      (NO_DOCS || DRY_RUN ? "" : ` · ${totals.docsFailed} docs-missing`)
+      (NO_DOCS || DRY_RUN ? "" : ` · ${totals.docsFailed} docs-missing`) +
+      (NO_PR || DRY_RUN ? "" : ` · ${totals.shipped.length} PR(s) opened`)
   );
   if (totals.failed > 0 || totals.docsFailed > 0 || !storybookOk) process.exitCode = 1;
   console.log();

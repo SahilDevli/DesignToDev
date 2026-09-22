@@ -24,6 +24,12 @@ scripts/scriptData/cook-usage.json
 # pixelProof — visual-regression report + proof images
 scripts/scriptData/pixelproof/
 
+# DesignToDev pipeline bookkeeping — version tracker + drift reports/screenshots.
+# Regenerated every run and deliberately excluded from every generated PR, so it
+# must never be git-tracked (a tracked-but-perpetually-dirty file breaks branch
+# switching once its committed baseline ever diverges).
+scripts/DesignToDev/scriptData/
+
 # Legacy pipeline output (superseded by scripts/scriptData/)
 pipeline_data/
 
