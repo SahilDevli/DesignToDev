@@ -1,0 +1,55 @@
+// Figma positions children absolutely inside a 374×359 frame; the offsets are
+// reproduced as padding/margins in a flex column so longer copy can grow the card.
+.noticeCard {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 374px;
+  max-width: 100%;
+  min-height: 359px;
+  // top 24.5 · right 33 (description edge) · bottom 26.5 · left 28
+  padding: 24.5px 33px 26.5px var(--spacing-10);
+  background: var(--colors-neutral-200);
+  border-radius: 13px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+
+  @media (max-width: 767px) {
+    padding-right: var(--spacing-10);
+  }
+}
+
+.noticeCard__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: normal;
+  color: var(--colors-neutral-900);
+  overflow-wrap: anywhere;
+}
+
+// Figma: title box 31px at y 24.5, description at y 87.5. The CSS line box of
+// 24px Inter is ~29px, so the 2px difference is added to the 32px gap.
+.noticeCard__description {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 110px;
+  margin: 34px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--colors-neutral-700);
+  overflow-wrap: anywhere;
+}
+
+// Button sits at x 254–333: 8px in from the description's right edge.
+.noticeCard__action {
+  align-self: flex-end;
+  margin-top: auto;
+  margin-right: var(--spacing-4);
+
+  @media (max-width: 767px) {
+    margin-right: 0;
+  }
+}

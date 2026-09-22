@@ -1,0 +1,52 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as NoticeCardStories from './NoticeCard.stories';
+
+<Meta of={NoticeCardStories} />
+
+# Notice Card
+
+A 374×359 card for a single notice: heading, body copy and a "more" action button. Use it to list announcements or alerts that link to more detail.
+
+<Canvas of={NoticeCardStories.Default} />
+
+<Controls />
+
+## Variants
+
+### Notice Card
+
+Figma defines one variant: `--colors-neutral-200` background, 13px radius, 24px semibold title, 14px medium body and a primary `Button` in the bottom-right corner.
+
+<Canvas of={NoticeCardStories.Default} />
+
+## Usage
+
+```tsx
+import { NoticeCard } from '../components/NoticeCard/NoticeCard';
+
+<NoticeCard
+  title="Scheduled maintenance"
+  description="The service will be unavailable on Sunday from 02:00 to 04:00 UTC."
+  onAction={() => openNotice('maintenance')}
+/>
+```
+
+## Responsive
+
+- Width is `374px` with `max-width: 100%`, so the card shrinks inside narrower parents without horizontal scroll.
+- Height is `min-height: 359px`; longer copy grows the card instead of being clipped.
+- Below 768px the right padding matches the 28px left padding, the button loses its extra 8px right inset, and the `Button` gets a 44px minimum touch height.
+
+## Accessibility
+
+- The root is an `<article>` and the title is an `<h3>`. Extra attributes such as `aria-label` are passed to the root.
+- The action is a native `<button>` (from `Button`): reachable with Tab, activated with Enter/Space, with a focus-visible outline.
+- With the default "more" label, the button's accessible name is "More about {title}" so several cards on a page stay distinguishable.
+
+## Assumptions
+
+- Figma's vector background rectangle is rendered as a CSS background and radius, not an image.
+- Figma's absolute positions are reproduced as padding and margins in a flex column; the title-to-description gap is 34px because the CSS title line box is 2px shorter than Figma's text box.
+- Mobile padding and button inset changes below 768px are code decisions, not from Figma.
+- Figma defines no card-level hover or prototype interactions; the button's states come from `Button`.
+- The 13px radius and the 33 / 24.5 / 26.5px paddings have no matching token and are literal values.
