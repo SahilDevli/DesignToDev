@@ -1,0 +1,49 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as NoticeCardStories from './NoticeCard.stories';
+
+<Meta of={NoticeCardStories} />
+
+# Notice Card
+
+A cream notice panel with a heading, body text and a bottom-right "more" action button. Use it to surface short announcements or notices in a grid or sidebar.
+
+<Canvas of={NoticeCardStories.NoticeCardDefault} />
+
+<Controls />
+
+## Variants
+
+### Notice Card
+
+Figma defines one variant with no variant properties. Change the content with `title`, `description` and `actionLabel`.
+
+<Canvas of={NoticeCardStories.NoticeCardDefault} />
+
+## Usage
+
+```tsx
+import { NoticeCard } from '../components/NoticeCard/NoticeCard';
+
+<NoticeCard
+  title="Scheduled maintenance"
+  description="The service will be unavailable on Sunday between 02:00 and 04:00 UTC."
+  onAction={() => openNotice('maintenance')}
+/>;
+```
+
+## Responsive
+
+The card fills its container (`width: 100%`) and is at least 359px tall. It grows taller instead of clipping when the text wraps more. In containers 374px wide or less, horizontal padding drops to 16px and the title scales between 20px and 24px.
+
+## Accessibility
+
+- The root is an `<article>` labelled by its `<h3>` title (`aria-labelledby`).
+- The action is a native `<button>` (reused `Button`) with accessible name "`{actionLabel}` about `{title}`". It is reachable with Tab and triggered with Enter/Space, and shows a focus ring on `:focus-visible`.
+
+## Assumptions
+
+- The Figma background vector (plain rounded rectangle, `#F9F3E1`, radius 13) is drawn in CSS instead of an SVG so it scales cleanly.
+- `min-height: 359px` rather than a fixed height; the button stays pinned bottom-right.
+- Padding and margins come from Figma's absolute positions (24.5 / 33 / 26.5 / 28px; the button sits 8px further in from the right edge than the text).
+- In containers ≤374px, padding drops to 16px and the title uses `clamp()`.
+- The button's accessible name includes the title, so multiple cards don't all expose an ambiguous "more".

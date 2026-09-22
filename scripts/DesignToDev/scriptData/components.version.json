@@ -1,8 +1,8 @@
 {
   "figmaFileKey": "0fNPEupARJhWxly5BBWOno",
-  "figmaVersion": "2397488678334303116",
-  "lastModified": "2026-09-10T06:48:43Z",
-  "updatedAt": "2026-09-16T15:45:05.698Z",
+  "figmaVersion": "2401899979116362029",
+  "lastModified": "2026-09-22T04:49:49Z",
+  "updatedAt": "2026-09-22T05:12:42.920Z",
   "components": [
     {
       "name": "Button",
@@ -97,8 +97,7 @@
       "builtAgainstHash": "226d94d7878f4247",
       "builtAt": "2026-09-16T15:56:13.220Z",
       "builtWithModel": "claude-sonnet-5",
-      "targetDir": "src/components/atoms/Button",
-      "docsBuiltAgainstHash": "226d94d7878f4247"
+      "targetDir": "src/components/atoms/Button"
     },
     {
       "name": "Card",
@@ -153,8 +152,7 @@
       "builtAgainstHash": "5685cf43dc7a004c",
       "builtAt": "2026-09-16T15:59:49.298Z",
       "builtWithModel": "claude-opus-5",
-      "targetDir": "src/components/Card",
-      "docsBuiltAgainstHash": "5685cf43dc7a004c"
+      "targetDir": "src/components/Card"
     },
     {
       "name": "Input",
@@ -231,8 +229,7 @@
       "builtAgainstHash": "dc25be8df82d1ca3",
       "builtAt": "2026-09-17T03:46:18.547Z",
       "builtWithModel": "claude-sonnet-5",
-      "targetDir": "src/components/atoms/Input",
-      "docsBuiltAgainstHash": "dc25be8df82d1ca3"
+      "targetDir": "src/components/atoms/Input"
     },
     {
       "name": "Footer",
@@ -270,8 +267,7 @@
       "builtAgainstHash": "f93bac8f59f50543",
       "builtAt": "2026-09-17T03:51:44.196Z",
       "builtWithModel": "claude-opus-5",
-      "targetDir": "src/components/Footer",
-      "docsBuiltAgainstHash": "f93bac8f59f50543"
+      "targetDir": "src/components/Footer"
     },
     {
       "name": "Navigation Bar",
@@ -308,8 +304,37 @@
       "builtAgainstHash": "a0b92490b3f00eec",
       "builtAt": "2026-09-17T03:54:12.165Z",
       "builtWithModel": "claude-opus-5",
-      "targetDir": "src/components/NavigationBar",
-      "docsBuiltAgainstHash": "a0b92490b3f00eec"
+      "targetDir": "src/components/NavigationBar"
+    },
+    {
+      "name": "Notice Card",
+      "nodeId": "484:520",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=484-520&m=dev",
+      "figmaHash": "7f033bfcd0e0eb48",
+      "width": 374,
+      "height": 359,
+      "variantProps": {},
+      "variants": [
+        {
+          "name": "Notice Card",
+          "nodeId": "484:520",
+          "props": {},
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=484-520&m=dev",
+          "width": 374,
+          "height": 359
+        }
+      ],
+      "dependsOn": [
+        "Button"
+      ],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "7f033bfcd0e0eb48",
+      "builtAt": "2026-09-22T05:15:11.154Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/components/NoticeCard",
+      "docsBuiltAgainstHash": "7f033bfcd0e0eb48"
     },
     {
       "name": "Product Card",
@@ -364,8 +389,7 @@
       "builtAgainstHash": "5706d61ecf20d5f0",
       "builtAt": "2026-09-17T03:58:25.490Z",
       "builtWithModel": "claude-opus-5",
-      "targetDir": "src/components/ProductCard",
-      "docsBuiltAgainstHash": "5706d61ecf20d5f0"
+      "targetDir": "src/components/ProductCard"
     },
     {
       "name": "Search Bar",
@@ -406,8 +430,7 @@
       "builtAgainstHash": "63b54098c99a42ac",
       "builtAt": "2026-09-17T04:04:28.770Z",
       "builtWithModel": "claude-sonnet-5",
-      "targetDir": "src/components/atoms/SearchBar",
-      "docsBuiltAgainstHash": "63b54098c99a42ac"
+      "targetDir": "src/components/atoms/SearchBar"
     }
   ]
 }

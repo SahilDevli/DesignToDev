@@ -1,0 +1,50 @@
+// Figma "Notice Card" 374x359: Rectangle 1 fill (#F9F3E1, radius 13) is drawn
+// with CSS so it scales with the container instead of stretching an SVG.
+.noticeCard {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  min-height: 359px;
+  // top 24.5 / right 33 (description edge) / bottom 26.5 / left 28
+  padding: 24.5px 33px 26.5px var(--spacing-10);
+  background: var(--colors-neutral-200);
+  border-radius: 13px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-style: normal;
+
+  @media (max-width: 374px) {
+    padding-right: var(--spacing-7);
+    padding-left: var(--spacing-7);
+  }
+}
+
+.noticeCard__title {
+  margin: 0;
+  font-size: clamp(20px, 6vw, 24px);
+  font-weight: 600;
+  line-height: normal;
+  color: var(--colors-neutral-900);
+  overflow-wrap: anywhere;
+}
+
+.noticeCard__description {
+  // Figma text top at y=87.5; title line box ends at ~53.5
+  // bottom margin keeps a gap above the button when long text pushes it down
+  margin: 34px 0 var(--spacing-9);
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--colors-neutral-700);
+  overflow-wrap: anywhere;
+}
+
+.noticeCard__action {
+  align-self: flex-end;
+  // pinned to the bottom; right edge sits 41px from the card edge (33 + 8)
+  margin-top: auto;
+  margin-right: var(--spacing-4);
+}
+

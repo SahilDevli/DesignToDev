@@ -48,7 +48,7 @@
     "components": {}
   },
   "git": {
-    "baseBranch": "",
+    "baseBranch": "main",
     "branchPrefix": "design",
     "remote": "origin",
     "maxDriftPercent": 20,
