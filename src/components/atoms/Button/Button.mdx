@@ -1,0 +1,67 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ButtonStories from './Button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+A clickable action button with `primary` and `secondary` visual styles. Use `primary` for the
+main action in a group and `secondary` for a lower-emphasis action next to it.
+
+<Canvas of={ButtonStories.PrimaryDefault} />
+<Controls />
+
+## Variants
+
+### Type
+
+<Canvas of={ButtonStories.PrimaryDefault} />
+<Canvas of={ButtonStories.SecondaryDefault} />
+
+### State
+
+<Canvas of={ButtonStories.PrimaryHover} />
+<Canvas of={ButtonStories.PrimaryDisabled} />
+<Canvas of={ButtonStories.SecondaryHover} />
+<Canvas of={ButtonStories.SecondaryDisabled} />
+
+## Usage
+
+```tsx
+import { Button } from '../../components/atoms/Button/Button';
+
+<Button variant="primary" onClick={handleAddToCart}>
+  Add to Cart
+</Button>
+<Button variant="secondary" onClick={handleViewDetails}>
+  View Details
+</Button>
+```
+
+## Responsive
+
+The button hugs its content at every width, so nothing reflows or truncates between 375px and
+1920px. Below 768px `min-height` increases to 44px to meet the WCAG 2.5.5 touch-target size; the
+design's 41px height is used from tablet up.
+
+## Accessibility
+
+- Renders a real `<button>` with `type="button"` by default (overridable via the native `type` prop).
+- `disabled` (or `state="disabled"`) sets both the native `disabled` attribute and
+  `aria-disabled="true"`, and blocks click/keyboard handlers.
+- Visible focus ring via `:focus-visible`.
+- Hover and pressed (`:active`) feedback are real CSS states, so they work for mouse and — where
+  applicable — keyboard/touch interaction without any extra JavaScript.
+
+## Assumptions
+
+- Figma's inside-aligned 1.5px border on Secondary is reproduced by subtracting 1.5px from the
+  padding so it hugs to the same 94×41 box as Primary, instead of growing past it.
+- Primary's fill colors and Secondary Disabled's colors aren't bound to Figma variables, so they're
+  written as raw hex rather than forced onto a mismatched design token.
+- Below 768px, `min-height: 44px` is added for touch-target accessibility; no other breakpoint
+  overrides are needed since the button hugs its content and never overflows.
+- A subtle `scale(0.98)` on `:active` provides pressed feedback, since Figma doesn't define a
+  distinct pressed state.
+- `variant`/`state` use lowercase values (`primary`/`secondary`, `default`/`hover`/`disabled`) to
+  match the API already consumed by `src/pages/ProductPage/ProductPage.tsx`.

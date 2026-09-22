@@ -1,0 +1,408 @@
+/* Home Page — Figma "Home Page-Desktop" (376:556), 1440×3760, absolute layout.
+   Base rules reproduce the 1440 frame: the nav overlays the full-bleed poster, the product band
+   and footer are full-bleed, and all other content is capped at 1440px and centred. Vertical
+   margins are the Figma gaps between node boxes. Instrument Serif leading comes from the Figma
+   line heights (128/166, 64/83, 40/52, 32/42 → 1.3em), so boxes don't depend on the loaded font. */
+
+$serif: 'Instrument Serif', serif;
+$serif-leading: 1.3;
+$content-width: 1440px;
+$card-width: 300px;
+$band-bg: #f2f2f2; /* Figma 373:332 — no matching token */
+$review-bg: #d9d9d9; /* Figma 374:550 / 374:536 / 373:433 — no matching token */
+
+/* ---------- Page shell ---------- */
+
+.homePage {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  /* Frame is 3760px; the footer ends at 3758px. */
+  padding-bottom: 2px;
+  overflow-x: hidden;
+  background-color: var(--colors-neutral-100);
+}
+
+/* Instance placement + fill override only (Figma 373:197); internals untouched. */
+.homePage .homePage__nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.39);
+}
+
+.homePage__main {
+  display: block;
+}
+
+.homePage__footer {
+  margin-top: 152px;
+}
+
+.section__inner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: $content-width;
+  margin-inline: auto;
+  padding-inline: 34px;
+}
+
+.section__title {
+  margin: 0;
+  font-family: $serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: $serif-leading;
+  color: var(--colors-neutral-900);
+}
+
+/* ---------- Landing poster ---------- */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 617px;
+  overflow: hidden;
+}
+
+.hero__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__inner {
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  width: 95%;
+  max-width: $content-width;
+  margin-inline: auto;
+  padding: 139px 146px 0;
+}
+
+.hero__title {
+  // border: 3px solid red;
+  max-width: 1400px;
+  margin: 0;
+  font-family: $serif;
+  font-weight: auto;
+  line-height: $serif-leading;
+  color: var(--colors-neutral-200);
+  font-size: 90px;
+}
+
+/* ---------- Explore Products ---------- */
+
+.products {
+  width: 100%;
+  margin-top: 77px;
+}
+
+.products__band {
+  width: 100%;
+  margin-top: 47.28px;
+  padding-block: 101.49px 107.03px;
+  background-color: $band-bg;
+}
+
+.products__grid {
+  display: grid;
+  grid-template-columns: repeat(4, $card-width);
+  /* Figma cards are 370px; the rendered card is ~1.4px taller from font metrics. */
+  grid-auto-rows: 370px;
+  column-gap: 57px;
+  row-gap: var(--spacing-9);
+  margin-block: 0;
+  list-style: none;
+}
+
+.products__item {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* ---------- Product's Review ---------- */
+
+.reviews {
+  width: 100%;
+  margin-top: 82px;
+}
+
+.reviews__list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 90px;
+  margin: 93.8px 70px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.review {
+  display: grid;
+  align-items: start;
+  margin: 0;
+}
+
+.review__media {
+  grid-area: media;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Absolute so the photo's intrinsic ratio never sizes the row. */
+.review__image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review__card {
+  grid-area: card;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 25px;
+  background-color: $review-bg;
+  font-family: $serif;
+  font-weight: 400;
+  line-height: $serif-leading;
+  color: var(--colors-neutral-900);
+}
+
+.review__quote {
+  max-width: 549.952px;
+  margin: 0;
+}
+
+.review__text {
+  margin: 0;
+  font-size: 32px;
+  line-height: $serif-leading;
+
+  /* Figma has an empty 32px paragraph between the two paragraphs. */
+  & + & {
+    margin-top: #{$serif-leading}em;
+  }
+}
+
+.review__author {
+  align-self: flex-end;
+  margin-top: auto;
+  font-size: 40px;
+  line-height: $serif-leading;
+  text-align: right;
+}
+
+/* Product 3 (374:549): image 510.4 · gap 48.5 · card 673.1 */
+.review--speaker {
+  grid-template-columns: minmax(0, 510.413fr) minmax(0, 673.062fr);
+  grid-template-areas: 'media card';
+  column-gap: 48.525px;
+
+  .review__media {
+    height: 435.092px;
+    border-radius: 39px;
+  }
+
+  .review__card {
+    min-height: 434.76px;
+    padding: 47.048px 0 19.76px 57.511px;
+  }
+
+  .review__author {
+    margin-right: 35px;
+  }
+}
+
+/* Product 2 (374:535): card 673.1 · gap 51.2 · image 507.7 (5.98px lower) */
+.review--headphones {
+  grid-template-columns: minmax(0, 673.062fr) minmax(0, 507.717fr);
+  grid-template-areas: 'card media';
+  column-gap: 51.221px;
+
+  .review__media {
+    height: 429.018px;
+    margin-top: 5.982px;
+    border-radius: 30px;
+  }
+
+  .review__card {
+    min-height: 434.668px;
+    padding: 47.038px 0 19.46px 57.511px;
+  }
+
+  .review__author {
+    margin-right: 45.83px;
+  }
+}
+
+/* Product 1 (374:534): image 534 · gap 24.9 · card 673.1 */
+.review--bed {
+  grid-template-columns: minmax(0, 534fr) minmax(0, 673.062fr);
+  grid-template-areas: 'media card';
+  column-gap: 24.938px;
+
+  .review__media {
+    height: 435px;
+    border-radius: var(--radius-6);
+  }
+
+  .review__card {
+    min-height: 435px;
+    padding: 71px 0 27px 52.062px;
+  }
+
+  .review__quote {
+    max-width: 560px;
+  }
+
+  .review__author {
+    margin-right: 56px;
+  }
+}
+
+/* ---------- Below the design width (< 1440): fluid ---------- */
+
+@media (max-width: 1439px) {
+  .homePage__footer {
+    margin-top: clamp(64px, 10.56vw, 152px);
+  }
+
+  .section__inner {
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+
+  .section__title {
+    font-size: clamp(2.25rem, 4.44vw, 64px);
+  }
+
+  .hero {
+    height: clamp(420px, 42.85vw, 617px);
+  }
+
+  .hero__inner {
+    padding: clamp(119px, 9.65vw, 139px) clamp(1rem, 10.14vw, 146px) 0;
+  }
+
+  .hero__title {
+    font-size: clamp(2.75rem, 6vw, 128px);
+  }
+
+  .products {
+    margin-top: clamp(40px, 5.35vw, 77px);
+  }
+
+  .products__band {
+    margin-top: clamp(var(--spacing-9), 3.28vw, 47.28px);
+    padding-block: clamp(40px, 7.05vw, 101.49px) clamp(40px, 7.43vw, 107.03px);
+  }
+
+  .products__grid {
+    grid-template-columns: repeat(4, minmax(0, $card-width));
+    grid-auto-rows: auto;
+    justify-content: center;
+    column-gap: clamp(var(--spacing-9), 3.96vw, 57px);
+  }
+
+  .reviews {
+    margin-top: clamp(48px, 5.69vw, 82px);
+  }
+
+  .reviews__list {
+    row-gap: clamp(40px, 6.25vw, 90px);
+    margin: clamp(var(--spacing-9), 6.51vw, 93.8px) 0 0;
+  }
+
+  .review {
+    align-items: stretch;
+    column-gap: clamp(var(--spacing-9), 3.37vw, 48px);
+  }
+
+  .review .review__media {
+    height: auto;
+    min-height: clamp(280px, 30.2vw, 435px);
+    margin-top: 0;
+  }
+
+  .review .review__card {
+    min-height: 0;
+    padding: clamp(var(--spacing-9), 3.27vw, 47px) clamp(var(--spacing-9), 3.99vw, 57.5px);
+  }
+
+  .review .review__quote {
+    max-width: none;
+  }
+
+  .review__text {
+    font-size: clamp(1.125rem, 2.22vw, 32px);
+  }
+
+  .review .review__author {
+    margin-right: 0;
+    padding-top: var(--spacing-9);
+    font-size: clamp(1.5rem, 2.78vw, 40px);
+  }
+}
+
+/* ---------- Lower laptop (1024–1199): 4-up would truncate the card titles; 2×2, not 3+1 ---------- */
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .products__grid {
+    grid-template-columns: repeat(2, minmax(0, $card-width));
+  }
+}
+
+/* ---------- Tablet + mobile (< 1024): nav wraps taller, reviews stack ---------- */
+
+@media (max-width: 1023px) {
+  .hero {
+    height: auto;
+    min-height: 420px;
+  }
+
+  .hero__inner {
+    padding: 176px clamp(1rem, 4vw, 3rem) 64px;
+  }
+
+  .products__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .review {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'media'
+      'card';
+    row-gap: var(--spacing-7);
+  }
+
+  .review .review__media {
+    min-height: 0;
+    aspect-ratio: 3 / 2;
+  }
+}
+
+/* ---------- Mobile (< 768) ---------- */
+
+@media (max-width: 767px) {
+  .products__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Large (>= 1920) ----------
+   No extra rules: .section__inner and .hero__inner already cap the content at 1440px and
+   centre it; the poster, product band, nav and footer stay full-bleed. */

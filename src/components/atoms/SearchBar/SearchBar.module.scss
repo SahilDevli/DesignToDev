@@ -1,0 +1,111 @@
+.searchbar {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  padding: 0 2px 0 31px;
+  border: var(--stroke-3) solid transparent;
+  border-radius: var(--radius-full);
+  background-color: var(--colors-neutral-400);
+  transition: border-color 0.15s ease;
+
+  @media (max-width: 767px) {
+    height: 56px;
+    padding: 0 2px 0 var(--spacing-8);
+  }
+}
+
+.searchbar__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.searchbar__field {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--colors-neutral-900);
+
+  &::placeholder {
+    color: var(--colors-neutral-900);
+    opacity: 1;
+  }
+
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 16px;
+  }
+}
+
+.searchbar__button {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 65px;
+  height: 65px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--colors-neutral-100);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:focus-visible {
+    outline: var(--stroke-2) solid var(--colors-primary-700);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  @media (max-width: 767px) {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.searchbar__icon {
+  width: 22px;
+  height: 22px;
+  background-color: var(--colors-neutral-900);
+  mask: url('../../../assets/SearchBar/search-icon.svg') center / contain no-repeat;
+  -webkit-mask: url('../../../assets/SearchBar/search-icon.svg') center / contain no-repeat;
+  transition: background-color 0.15s ease;
+
+  @media (max-width: 767px) {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.searchbar--focus {
+  border-color: var(--colors-primary-700);
+
+  .searchbar__icon {
+    background-color: var(--colors-primary-700);
+  }
+}

@@ -1,0 +1,297 @@
+/* Product Page — Figma "Product Page" (409:446), 1440×3530, absolute layout.
+   Base rules reproduce the 1440 frame: nav, feature band and footer are full-bleed, all other content
+   is capped at 1440px and centred. Vertical margins are the Figma gaps between node boxes.
+   Instrument Serif "normal" leading is set explicitly (81.68 / 64 → 1.276em) so box heights don't
+   depend on the loaded font. */
+
+$serif: 'Instrument Serif', serif;
+$serif-leading: 1.276;
+$content-width: 1440px;
+$card-width: 300px;
+$card-height: 370px;
+$nav-bg: rgba(0, 0, 0, 0.3); /* Figma 410:617 instance fill override */
+
+/* ---------- Page shell ---------- */
+
+.productPage {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: var(--colors-neutral-100);
+}
+
+/* Instance fill override only; internals untouched. */
+.productPage .productPage__nav {
+  background-color: $nav-bg;
+}
+
+.productPage__main {
+  display: block;
+}
+
+/* Footer 3071 − list bottom 2773 */
+.productPage__footer {
+  margin-top: 298px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.section__inner {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: $content-width;
+  margin-inline: auto;
+  padding-inline: 66px;
+}
+
+.section__title {
+  margin: 0;
+  font-family: $serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: $serif-leading;
+  color: var(--colors-neutral-900);
+}
+
+/* ---------- Search (410:642: x 433, y 108, 574×70) ---------- */
+
+.search {
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 13px;
+}
+
+.search__bar {
+  max-width: 574px;
+  margin-inline: auto;
+}
+
+/* ---------- Product lists (4 × 300px, 33px column gap, 50px row gap) ---------- */
+
+.productList {
+  display: grid;
+  grid-template-columns: repeat(4, $card-width);
+  /* Figma cards are 370px; the rendered card is ~1.4px taller from font metrics. */
+  grid-auto-rows: $card-height;
+  column-gap: 33px;
+  row-gap: 50px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.productList__item {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Home Tech Collection: title y 263.81 (search ends 178); list x 70, y 420 (title ends 345.49). */
+.collection--tech {
+  margin-top: 85.81px;
+
+  .productList {
+    margin: 74.51px 0 0 4px;
+  }
+}
+
+/* Fine Furnishings: title x 70, y 1820 (feature ends 1739); list x 71, y 1983 (title ends 1901.68). */
+.collection--furnishings {
+  margin-top: 81px;
+
+  .section__title {
+    margin-left: 4px;
+  }
+
+  .productList {
+    margin: 81.32px 0 0 5px;
+  }
+}
+
+/* ---------- Product Add (410:977: y 1315, photo 700×424 at x 0, copy at x 776) ---------- */
+
+.feature {
+  width: 100%;
+  /* 1315 − first list bottom 1210 */
+  margin-top: 105px;
+}
+
+.feature__inner {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 700px 628px;
+  column-gap: 76px;
+  width: 100%;
+  max-width: $content-width;
+  margin-inline: auto;
+}
+
+.feature__media {
+  height: 424px;
+  overflow: hidden;
+}
+
+.feature__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feature__content {
+  min-width: 0;
+  /* copy y 1371 − 1315 */
+  padding-top: 56px;
+  font-family: $serif;
+  font-weight: 400;
+  line-height: $serif-leading;
+  color: var(--colors-neutral-900);
+}
+
+.feature__title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 48px;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+/* Figma has an empty 48px paragraph between the heading and the body copy. */
+.feature__text {
+  margin: #{$serif-leading * 48px} 0 0;
+  font-size: 36px;
+  line-height: inherit;
+}
+
+/* Buttons y 1629 (copy ends 1585); Add to Cart x 776–902, View Details x 930. */
+.feature__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-7) 28px;
+  margin-top: 44px;
+}
+
+/* ---------- Below the design width (< 1440): fluid ---------- */
+
+@media (max-width: 1439px) {
+  .productPage__footer {
+    margin-top: clamp(64px, 20.69vw, 298px);
+  }
+
+  .section__inner {
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+
+  .section__title {
+    font-size: clamp(2.25rem, 4.44vw, 64px);
+  }
+
+  .search {
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+
+  .productList {
+    grid-template-columns: repeat(4, minmax(0, $card-width));
+    grid-auto-rows: auto;
+    justify-content: center;
+    column-gap: clamp(var(--spacing-9), 2.29vw, 33px);
+    row-gap: clamp(var(--spacing-9), 3.47vw, 50px);
+  }
+
+  .collection--tech,
+  .collection--furnishings {
+    margin-top: clamp(40px, 5.96vw, 85.81px);
+
+    .section__title {
+      margin-left: 0;
+    }
+
+    .productList {
+      margin: clamp(var(--spacing-9), 5.17vw, 74.51px) 0 0;
+    }
+  }
+
+  .feature {
+    margin-top: clamp(48px, 7.29vw, 105px);
+  }
+
+  .feature__inner {
+    grid-template-columns: minmax(0, 700fr) minmax(0, 628fr);
+    align-items: center;
+    column-gap: clamp(var(--spacing-9), 5.28vw, 76px);
+    padding-right: clamp(1rem, 4vw, 3rem);
+  }
+
+  .feature__media {
+    height: auto;
+    aspect-ratio: 700 / 424;
+  }
+
+  .feature__content {
+    padding-top: 0;
+  }
+
+  .feature__title {
+    font-size: clamp(1.75rem, 3.33vw, 48px);
+  }
+
+  .feature__text {
+    margin-top: clamp(var(--spacing-7), 4.25vw, 61.25px);
+    font-size: clamp(1.25rem, 2.5vw, 36px);
+  }
+
+  .feature__actions {
+    margin-top: clamp(var(--spacing-9), 3.06vw, 44px);
+  }
+}
+
+/* ---------- Lower laptop (1024–1199): 4-up would truncate the card titles ---------- */
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .productList {
+    grid-template-columns: repeat(3, minmax(0, $card-width));
+  }
+}
+
+/* ---------- Tablet + mobile (< 1024): 2-up cards, feature stacks ---------- */
+
+@media (max-width: 1023px) {
+  .productList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-content: stretch;
+  }
+
+  .feature__inner {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--spacing-9);
+    padding-right: 0;
+  }
+
+  .feature__content {
+    padding-inline: clamp(1rem, 4vw, 3rem);
+  }
+}
+
+/* ---------- Mobile (< 768): 1-up cards ---------- */
+
+@media (max-width: 767px) {
+  .productList {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- Large (>= 1920) ----------
+   No extra rules: .section__inner and .feature__inner already cap the content at 1440px and centre
+   it; nav and footer stay full-bleed. */

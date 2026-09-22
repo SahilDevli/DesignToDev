@@ -1,0 +1,73 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ProductPageStories from './ProductPage.stories';
+
+<Meta of={ProductPageStories} />
+
+# Product Page
+
+The Blue Sea Global product listing page. It combines search, two product collections and a featured sofa promotion. Use it as the "Products" destination of the site.
+
+<Canvas of={ProductPageStories.Desktop} />
+
+<Controls />
+
+## Sections
+
+1. **Navigation Bar**: reused `NavigationBar` (the `<header>` landmark, with the Login `Button`). The page only overrides its fill, to `rgba(0, 0, 0, 0.3)`.
+2. **Search Bar**: reused `SearchBar`, 574px wide and centred.
+3. **Home Tech Collection**: *bespoke* section with an `h2` and a 4 × 2 grid of reused `ProductCard`s.
+4. **Product Add**: *bespoke* section with the sofa photo, headline, copy, and two reused `Button`s ("Add to Cart", "View Details").
+5. **Fine Furnishings**: *bespoke* section with an `h2` and a 4 × 2 grid of reused `ProductCard`s.
+6. **Footer**: reused `Footer`, which includes the reused `Input` ("Email") and "Contact Now" `Button`.
+
+## Usage
+
+```tsx
+import ProductPage from '../pages/ProductPage/ProductPage';
+
+export function App() {
+  return (
+    <ProductPage
+      onSearch={(query) => console.log('search', query)}
+      onAddToCart={(product) => console.log('add', product.id)}
+      onAddFeaturedToCart={() => console.log('add sofa')}
+      onViewDetails={() => console.log('sofa details')}
+      onLogin={() => console.log('login')}
+      onSubscribe={(email) => console.log('subscribe', email)}
+    />
+  );
+}
+```
+
+## Responsive
+
+| Range | What changes |
+| --- | --- |
+| ≥ 1920px | Nav and footer full-bleed; content capped at 1440px and centred. |
+| 1440px (base) | The Figma frame. |
+| 1024–1439px | Titles, gaps and feature type scale with `clamp()`. Cards are 4-up, or 3-up from 1024 to 1199px. The feature stays side by side. |
+| 768–1023px | Cards 2-up. The sofa photo stacks above its copy and Buttons. |
+| < 768px | Cards 1-up. Feature stacked. |
+
+<Canvas of={ProductPageStories.Tablet} />
+
+<Canvas of={ProductPageStories.Mobile} />
+
+## Accessibility
+
+- Landmarks: `banner` (NavigationBar), `navigation` "Primary", `search`, `main`, `contentinfo` (Footer).
+- Heading order: a visually hidden `h1` "Products", then an `h2` for each section, then `h3` card titles inside ProductCard.
+- Each section is a `region` labelled by its `h2` through `aria-labelledby`.
+- The product grids are `<ul>` lists, and each card is an `<article>`.
+- The sofa photo has descriptive alt text.
+- Every action is a native `<button>` or link, so it works with the keyboard. The reused components provide their own focus styles.
+
+## Assumptions
+
+- Figma has no `h1`, so the page adds a visually hidden `h1` "Products".
+- Figma colours the "Products" nav link `--colors-primary-700`. `NavigationBar` has no active-link prop and its internals must not be restyled, so that colour is not shown.
+- The nav bar stays in normal flow. It has no burger menu: below 1024px the reused NavigationBar wraps its links onto a second row.
+- At 1440px the Figma x offsets (66/70/71px) are kept. Below 1440px they become one fluid inline padding.
+- Card grid: 4-up down to 1200px and 3-up from 1024 to 1199px (to avoid truncated titles). It is 2-up from 768 to 1023px and 1-up below 768px. Rows are fixed at 370px only at 1440px and above.
+- Below 1440px the feature photo keeps a 700:424 aspect ratio. Below 1024px it stacks above the copy.
+- All 16 cards use the Figma values (SoundWave Pro, $149.99). The sofa alt text was written from the image.

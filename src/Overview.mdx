@@ -1,0 +1,27 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Overview" />
+
+# Design System
+
+Every component and page here is generated from Figma by the DesignToDev pipeline
+(`scripts/DesignToDev/`) and proved against the design with pixel diffing.
+
+- **Atoms** — the primitives: Button, Input, and friends.
+- **Components** — composites built from atoms.
+- **Pages** — full screens, composed from the above.
+
+## How a change reaches this site
+
+1. `npm run designToken` — Figma variables become CSS custom properties.
+2. `npm run componentPipeline` — hashes the Figma file, builds what changed,
+   and writes each component's docs page in the same turn.
+3. `npm run pagePipeline` — the same, for page-level designs.
+4. `npm run driftDetection` — renders each story and diffs it against the Figma frame.
+5. `npm run storybookDocs` — backfills docs for anything built before this step existed.
+
+Nothing is rebuilt unless its Figma content hash moved, so a no-op run is free.
+
+<div style={{ opacity: 0.6, fontSize: 13, marginTop: 32 }}>
+  First generated 2026-09-16
+</div>

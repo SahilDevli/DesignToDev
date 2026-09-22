@@ -1,0 +1,288 @@
+/* Footer — Figma "Footer" (404:84): Footer-Desktop 376:631 (1440×459) and Footer-Laptop 404:85
+   (1024×459). Both frames are absolute layouts, so >= 1024px the nodes are positioned with the
+   Figma coordinates: the left block from the left edge, the link columns and email form from the
+   right edge (identical at the design width, no dead gap between breakpoints), and the copyright
+   centred. Instrument Serif "normal" leading is set explicitly (1.276em, as in the pages) so box
+   heights don't depend on the fallback font. Below 1024px it becomes a fluid flow layout. */
+
+$serif: 'Instrument Serif', serif;
+$sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+$serif-leading: 1.276;
+$inter-leading: 1.21;
+$footer-bg: #e0e0e0;
+$text: #000;
+
+.footer {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  height: 459px;
+  margin: 0;
+  background-color: $footer-bg;
+  color: $text;
+  font-family: $serif;
+  font-weight: 400;
+}
+
+.footer__title,
+.footer__note,
+.footer__copyright,
+.footer__heading,
+.footer__list {
+  margin: 0;
+  padding: 0;
+}
+
+.footer__title {
+  position: absolute;
+  top: 77px;
+  left: 42px;
+  font-size: 64px;
+  line-height: $serif-leading;
+  white-space: nowrap;
+  color: var(--colors-neutral-900);
+}
+
+.footer__note {
+  position: absolute;
+  top: 260px;
+  left: 42px;
+  width: 584px;
+  font-size: 24px;
+  line-height: $serif-leading;
+}
+
+.footer__column {
+  position: absolute;
+  top: 93px;
+}
+
+.footer__column--quick {
+  right: 304px;
+  width: 178px;
+}
+
+.footer__column--other {
+  right: 79px;
+  width: 197px;
+}
+
+.footer__heading {
+  font-family: $serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: $serif-leading;
+  white-space: nowrap;
+}
+
+.footer__list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  font-family: $sans;
+  font-size: 15px;
+  line-height: $inter-leading;
+}
+
+/* Quick Links: one empty 24px serif line between heading and list. */
+.footer__list--quick {
+  margin-top: calc(24px * #{$serif-leading});
+}
+
+/* Other Businesses: an empty 20px serif line, with the 10px paragraph spacing on both sides. */
+.footer__list--other {
+  gap: var(--spacing-5);
+  margin-top: calc(var(--spacing-5) * 2 + 20px * #{$serif-leading});
+}
+
+.footer__link {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--colors-primary-700);
+    outline-offset: 2px;
+    border-radius: var(--radius-1);
+  }
+}
+
+.footer__form {
+  position: absolute;
+  top: 337px;
+  right: 55px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-5);
+  margin: 0;
+}
+
+.footer__input {
+  flex: 0 0 280px;
+  width: 280px;
+}
+
+/* Button top sits 1px below the input box top: label 16 + gap 6 + 1. */
+.footer__button {
+  flex: 0 0 auto;
+  min-width: 137px; /* Figma hug width; Inter renders the label ~1px narrower */
+  margin-top: 23px;
+}
+
+.footer__copyright {
+  position: absolute;
+  top: 431px;
+  left: calc(50% - 69px);
+  font-size: 16px;
+  line-height: $serif-leading;
+  white-space: nowrap;
+}
+
+/* ---------- Laptop: Footer-Laptop 404:85 ---------- */
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .footer__title {
+    top: 113px;
+    left: 31px;
+    font-size: 58px;
+  }
+
+  .footer__note {
+    font-size: 16px;
+  }
+
+  .footer__column {
+    top: 74px;
+  }
+
+  .footer__column--quick {
+    right: 217px;
+  }
+
+  .footer__column--other {
+    right: 28px;
+    width: 178px;
+  }
+
+  .footer__list {
+    font-size: 13px;
+  }
+
+  .footer__form {
+    top: 316px;
+    right: 28px;
+  }
+}
+
+/* ---------- Below 1024px: fluid flow layout (see Footer.md "Assumptions") ---------- */
+
+@media (max-width: 1023px) {
+  .footer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      'title title'
+      'note note'
+      'quick other'
+      'form form'
+      'copyright copyright';
+    column-gap: var(--spacing-9);
+    height: auto;
+    padding: 48px clamp(var(--spacing-7), 4vw, 42px) var(--spacing-5);
+  }
+
+  .footer__title,
+  .footer__note,
+  .footer__column,
+  .footer__form,
+  .footer__copyright {
+    position: static;
+    width: auto;
+  }
+
+  .footer__title {
+    grid-area: title;
+    font-size: clamp(40px, 5.6vw, 58px);
+    white-space: normal;
+  }
+
+  .footer__note {
+    grid-area: note;
+    max-width: 584px;
+    margin-top: var(--spacing-9);
+    font-size: 16px;
+  }
+
+  .footer__column {
+    margin-top: 40px;
+  }
+
+  .footer__column--quick {
+    grid-area: quick;
+  }
+
+  .footer__column--other {
+    grid-area: other;
+  }
+
+  .footer__list {
+    font-size: 13px;
+  }
+
+  .footer__link {
+    white-space: normal;
+  }
+
+  .footer__form {
+    grid-area: form;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+
+  .footer__input {
+    flex: 1 1 240px;
+    width: auto;
+    max-width: 280px;
+  }
+
+  .footer__copyright {
+    grid-area: copyright;
+    justify-self: center;
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      'title'
+      'note'
+      'quick'
+      'other'
+      'form'
+      'copyright';
+  }
+
+  .footer__column--other {
+    margin-top: var(--spacing-9);
+  }
+
+  .footer__link {
+    display: inline-block;
+    padding-block: var(--spacing-2);
+  }
+
+  .footer__input {
+    max-width: none;
+  }
+
+  /* Button wraps under the input, so the desktop box-alignment offset no longer applies. */
+  .footer__button {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,59 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as CardStories from './Card.stories';
+
+<Meta of={CardStories} />
+
+# Card
+
+A 300×320 content card. Use Basic for a short text block with a documentation link, Image for content with a header visual and category badge, and Stat for a headline metric with its trend.
+
+<Canvas of={CardStories.Basic} />
+
+<Controls />
+
+## Variants
+
+### Type
+
+**Basic**: title, description and a "View documentation →" link.
+
+<Canvas of={CardStories.Basic} />
+
+**Image**: gradient header, badge, one-line truncated title and description.
+
+<Canvas of={CardStories.Image} />
+
+**Stat**: uppercase label, large metric value, trend pill and caption.
+
+<Canvas of={CardStories.Stat} />
+
+## Usage
+
+```tsx
+import { Card } from '../components/Card/Card';
+
+<Card type="Basic" title="Getting started" description="Set up the project in five minutes." href="/docs" />
+<Card type="Image" badge="Productivity" title="Focus mode" description="Silence notifications while you work." />
+<Card type="Stat" title="Revenue" description="$48,210" change="12.4%" changeLabel="since last month" />
+```
+
+## Responsive
+
+- The width is `300px` with `max-width: 100%`, so the card shrinks to fit a parent narrower than 300px and never causes horizontal scroll.
+- The height is `min-height: 320px`, so longer text grows the card instead of being cut off.
+- Below 768px, the Basic link has a 44px minimum touch height. The Stat footer wraps the caption below the pill when space runs out.
+
+## Accessibility
+
+- The root is an `<article>`. The title is an `<h3>`. Extra attributes such as `aria-label` are passed to the root.
+- The Basic link is a native `<a>`, so it is focusable with Tab and activates with Enter. It shows a focus-visible outline.
+- Icons use `alt=""`, and the Image header is `aria-hidden`, because they are decorative.
+- In the Image variant, the truncated title keeps its full text in the `title` attribute.
+
+## Assumptions
+
+- The 1px Figma INSIDE stroke is drawn as a `::after` overlay, so padding matches Figma exactly.
+- The Figma `image-placeholder` is a gradient fill with no image asset, so it is rendered as a decorative gradient div.
+- Fixed Figma copy ("View documentation", "Productivity", "12.4%", "since last month") is exposed as props that default to that copy.
+- Figma defines no hover or focus states. The link's hover underline, arrow nudge and focus outline were added as conventional affordances.
+- Colours with no matching token (`#111827`, `#e5e7eb`, `#eef2ff`, `#c7d2fe`, `#4f46e5`) and the card shadow are literal values.

@@ -1,0 +1,57 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as FooterStories from './Footer.stories';
+
+<Meta of={FooterStories} />
+
+# Footer
+
+The full-width Blue Sea Global site footer, with the brand note, two link columns, an email form and the copyright line. Use it once at the bottom of every page.
+
+<Canvas of={FooterStories.Desktop} />
+
+<Controls />
+
+## Variants
+
+### Screen size
+
+There are no variant props. The layout switches with CSS media queries.
+
+**Desktop** (1440×459, ≥ 1440px): 64px title, 24px note, 15px links.
+
+<Canvas of={FooterStories.Desktop} />
+
+**Laptop** (1024×459, 1024–1439px): 58px title, 16px note, 13px links.
+
+<Canvas of={FooterStories.Laptop} />
+
+## Usage
+
+```tsx
+import { Footer } from '../components/Footer/Footer';
+
+<Footer onSubscribe={(email) => api.subscribe(email)} />
+```
+
+## Responsive
+
+- 1024px and wider: Figma's absolute positions. The brand block is pinned left, the link columns and form are pinned right, and the copyright is centred.
+- 768–1023px: grid with auto height. Title and note run full width, link columns sit side by side, and the form sits below them.
+- Under 768px: everything stacks, the input goes full width and the button wraps below it.
+
+## Accessibility
+
+- The root is a `<footer>` (`contentinfo` landmark).
+- Each link column is a `<nav>` with `aria-labelledby` pointing to its `<h2>` heading. Links are real `<a>` elements with a focus-visible outline.
+- The email field has a visible "Email" label. On an invalid submit it gets `aria-invalid="true"`, and `aria-describedby` points to the error message.
+- Enter in the field or activating "Contact Now" submits the form.
+
+## Assumptions
+
+- The layout below 1024px is not in Figma (see Responsive).
+- Between breakpoints, the right block follows the right edge rather than Figma's LEFT constraints.
+- Serif line height is 1.276em and Inter's is 1.21. The blank lines in the Figma text layers become list margins.
+- Column titles are `<h2>`, and the links point to hash anchors because the Figma text is static.
+- Email validation (a simple `name@domain.tld` check and the "Please enter a valid email id" message) is not in Figma.
+- The button has `min-width: 137px` to match Figma's hug width.
+- Background `#e0e0e0` and text `#000` have no matching token.

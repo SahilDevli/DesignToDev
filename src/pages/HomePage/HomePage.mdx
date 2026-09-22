@@ -1,0 +1,63 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as HomePageStories from './HomePage.stories';
+
+<Meta of={HomePageStories} />
+
+# Home Page
+
+The Blue Sea Global landing page: navigation over a full-bleed poster, a band of four product cards,
+three customer reviews and the footer. Use it as the site's entry route.
+
+<Canvas of={HomePageStories.Desktop} />
+
+<Controls />
+
+## Sections
+
+1. **Navigation Bar** — reused `NavigationBar` (contains the Login `Button`), overlaid on the poster with a 39% black fill.
+2. **Landing poster** — bespoke: background photo and the `h1` "Everything For Your Space".
+3. **Explore Products** — bespoke section and grey band; the four cards are reused `ProductCard`s.
+4. **Product's Review** — bespoke: three `figure`s with photo, quote and author, alternating sides.
+5. **Footer** — reused `Footer` (contains the Email `Input` and the Contact Now `Button`).
+
+## Usage
+
+```tsx
+import HomePage from '../pages/HomePage/HomePage';
+
+export function App() {
+  return (
+    <HomePage
+      onLogin={() => openLogin()}
+      onAddToCart={(product) => cart.add(product)}
+      onSubscribe={(email) => subscribe(email)}
+    />
+  );
+}
+```
+
+## Responsive
+
+- **≥ 1920px** (`Large`) — bands full-bleed, content capped at 1440px and centred.
+- **1440px+** (`Desktop`) — the Figma frame.
+- **1024–1439px** (`Laptop`) — type, poster and spacing scale fluidly; cards 4-up, 2×2 below 1200px; reviews stay side by side.
+- **768–1023px** (`Tablet`) — cards 2×2; each review stacks its photo above the quote.
+- **< 768px** (`Mobile`) — cards 1-up; reviews stacked.
+
+## Accessibility
+
+- Landmarks: `header` (from `NavigationBar`, with `nav` "Primary"), `main`, `footer` (from `Footer`).
+- One `h1` (poster title); `h2` for "Explore Products" and "Product's Review"; card titles are `h3`.
+- Each section is a `region` named by its heading via `aria-labelledby`.
+- Cards and reviews are `ul` lists; reviews use `figure` / `blockquote` / `figcaption`.
+- Review photos have descriptive alt text; the poster photo is decorative (`alt=""`).
+- All buttons, links, the rating stars and the email field are native, keyboard-operable controls provided by the reused components.
+
+## Assumptions
+
+- Content is capped at 1440px and centred; bands stay full-bleed (21px gutters at 1482px).
+- The nav stays overlaid on the poster; below 1024px it wraps taller, so the poster title gets 176px top padding and the poster grows to fit.
+- Cards go 4-up → 2×2 (768–1199px) → 1-up (< 768px); 3-up was skipped because it truncates titles and orphans the fourth card.
+- Below 1440px the per-row review offsets become one fluid padding; below 1024px reviews stack with the photo first at 3:2.
+- `#f2f2f2` and `#d9d9d9` have no design token and are kept as SCSS variables.
+- Serif line height is 1.3em, from the Figma line heights.

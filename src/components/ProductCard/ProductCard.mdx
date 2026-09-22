@@ -1,0 +1,67 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as ProductCardStories from './ProductCard.stories';
+
+<Meta of={ProductCardStories} />
+
+# Product Card
+
+A 300×370 card that shows one product: image, name, price, description, star rating and an "Add to Cart" button. Use it in product grids and listings.
+
+<Canvas of={ProductCardStories.Default} />
+
+<Controls />
+
+## State
+
+### Default
+
+<Canvas of={ProductCardStories.Default} />
+
+### Hover
+
+Turns on with a real pointer hover, or with `state="Hover"`. The border turns blue, the shadow gets bigger and the hover photo fades in.
+
+<Canvas of={ProductCardStories.Hover} />
+
+### Disabled
+
+The card is 50% opacity, `aria-disabled="true"` is set, the button is disabled and the stars are read-only.
+
+<Canvas of={ProductCardStories.Disabled} />
+
+## Usage
+
+```tsx
+import { ProductCard } from '../components/ProductCard/ProductCard';
+
+<ProductCard
+  productName="SoundWave Pro"
+  price="$149.99"
+  description="Immersive spatial audio with hybrid active noise cancellation."
+  ratingLabel="4.8 (128 reviews)"
+  readOnly
+  onAddToCart={() => addToCart(product)}
+/>
+```
+
+## Responsive
+
+The card is 300px wide with `max-width: 100%`, so it shrinks inside a narrower container. When it shrinks, the product name is cut off with an ellipsis first and the price stays whole. When the card is narrower than about 220px, the rating label wraps under the stars. There are no breakpoint-specific overrides.
+
+## Accessibility
+
+- The root is an `<article>`, and the product name is an `<h3>` whose `title` holds the full name.
+- "Add to Cart" is a native `<button>`. When the card is disabled, the button gets `disabled` and the card gets `aria-disabled="true"`.
+- Interactive stars form a `radiogroup` ("Rate this product") of `radio` buttons ("1 star" … "5 stars") with `aria-checked`. Only one star is in the tab order at a time. Arrow keys, Home and End change the rating, and a click sets it.
+- Read-only or disabled stars render as `role="img"` with the label "Rated N out of 5".
+- Decorative images (cart icon, hover photo) are `aria-hidden`. The product image's `alt` is the product name.
+
+## Assumptions
+
+- The stars are one flattened Figma graphic. Each star is masked from that SVG: filled stars are gold, empty stars are grey, and `defaultValue` is 5 so the default render matches Figma.
+- `ratingLabel` is plain text and is not calculated from the star value.
+- Each state uses its own Figma photo unless you pass `imageSrc`.
+- The pressed colour (`--colors-primary-900`) and focus outlines aren't in Figma.
+- The description is cut off after two lines to keep the 370px height.
+- There are no breakpoint overrides. The 300px card fits a 375px screen and shrinks with `max-width: 100%`.
+- The image and button use a 6px radius written directly, because the token scale has no 6px step.

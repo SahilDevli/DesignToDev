@@ -1,0 +1,413 @@
+{
+  "figmaFileKey": "0fNPEupARJhWxly5BBWOno",
+  "figmaVersion": "2397488678334303116",
+  "lastModified": "2026-09-10T06:48:43Z",
+  "updatedAt": "2026-09-16T15:45:05.698Z",
+  "components": [
+    {
+      "name": "Button",
+      "nodeId": "2:72",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-72&m=dev",
+      "figmaHash": "226d94d7878f4247",
+      "width": 708,
+      "height": 105,
+      "variantProps": {
+        "Type": [
+          "Primary",
+          "Secondary"
+        ],
+        "State": [
+          "Default",
+          "Hover",
+          "Disabled"
+        ]
+      },
+      "variants": [
+        {
+          "name": "Type=Primary, State=Default",
+          "nodeId": "2:60",
+          "props": {
+            "Type": "Primary",
+            "State": "Default"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-60&m=dev",
+          "width": 94,
+          "height": 41
+        },
+        {
+          "name": "Type=Primary, State=Hover",
+          "nodeId": "2:62",
+          "props": {
+            "Type": "Primary",
+            "State": "Hover"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-62&m=dev",
+          "width": 94,
+          "height": 41
+        },
+        {
+          "name": "Type=Primary, State=Disabled",
+          "nodeId": "2:64",
+          "props": {
+            "Type": "Primary",
+            "State": "Disabled"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-64&m=dev",
+          "width": 94,
+          "height": 41
+        },
+        {
+          "name": "Type=Secondary, State=Default",
+          "nodeId": "2:68",
+          "props": {
+            "Type": "Secondary",
+            "State": "Default"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-68&m=dev",
+          "width": 94,
+          "height": 41
+        },
+        {
+          "name": "Type=Secondary, State=Hover",
+          "nodeId": "2:66",
+          "props": {
+            "Type": "Secondary",
+            "State": "Hover"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-66&m=dev",
+          "width": 94,
+          "height": 41
+        },
+        {
+          "name": "Type=Secondary, State=Disabled",
+          "nodeId": "2:70",
+          "props": {
+            "Type": "Secondary",
+            "State": "Disabled"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=2-70&m=dev",
+          "width": 94,
+          "height": 41
+        }
+      ],
+      "dependsOn": [],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "226d94d7878f4247",
+      "builtAt": "2026-09-16T15:56:13.220Z",
+      "builtWithModel": "claude-sonnet-5",
+      "targetDir": "src/components/atoms/Button",
+      "docsBuiltAgainstHash": "226d94d7878f4247"
+    },
+    {
+      "name": "Card",
+      "nodeId": "5:38",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-38&m=dev",
+      "figmaHash": "5685cf43dc7a004c",
+      "width": 1028,
+      "height": 384,
+      "variantProps": {
+        "Type": [
+          "Basic",
+          "Image",
+          "Stat"
+        ]
+      },
+      "variants": [
+        {
+          "name": "Type=Basic",
+          "nodeId": "5:35",
+          "props": {
+            "Type": "Basic"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-35&m=dev",
+          "width": 300,
+          "height": 320
+        },
+        {
+          "name": "Type=Image",
+          "nodeId": "5:36",
+          "props": {
+            "Type": "Image"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-36&m=dev",
+          "width": 300,
+          "height": 320
+        },
+        {
+          "name": "Type=Stat",
+          "nodeId": "5:37",
+          "props": {
+            "Type": "Stat"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-37&m=dev",
+          "width": 300,
+          "height": 320
+        }
+      ],
+      "dependsOn": [],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "5685cf43dc7a004c",
+      "builtAt": "2026-09-16T15:59:49.298Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/components/Card",
+      "docsBuiltAgainstHash": "5685cf43dc7a004c"
+    },
+    {
+      "name": "Input",
+      "nodeId": "4:23",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=4-23&m=dev",
+      "figmaHash": "dc25be8df82d1ca3",
+      "width": 1560,
+      "height": 152,
+      "variantProps": {
+        "State": [
+          "Default",
+          "Filled",
+          "Active",
+          "Disabled",
+          "Error"
+        ]
+      },
+      "variants": [
+        {
+          "name": "State=Default",
+          "nodeId": "4:2",
+          "props": {
+            "State": "Default"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=4-2&m=dev",
+          "width": 280,
+          "height": 64
+        },
+        {
+          "name": "State=Filled",
+          "nodeId": "4:6",
+          "props": {
+            "State": "Filled"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=4-6&m=dev",
+          "width": 280,
+          "height": 64
+        },
+        {
+          "name": "State=Active",
+          "nodeId": "4:10",
+          "props": {
+            "State": "Active"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=4-10&m=dev",
+          "width": 280,
+          "height": 64
+        },
+        {
+          "name": "State=Disabled",
+          "nodeId": "4:14",
+          "props": {
+            "State": "Disabled"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=4-14&m=dev",
+          "width": 280,
+          "height": 64
+        },
+        {
+          "name": "State=Error",
+          "nodeId": "4:18",
+          "props": {
+            "State": "Error"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=4-18&m=dev",
+          "width": 280,
+          "height": 85
+        }
+      ],
+      "dependsOn": [],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "dc25be8df82d1ca3",
+      "builtAt": "2026-09-17T03:46:18.547Z",
+      "builtWithModel": "claude-sonnet-5",
+      "targetDir": "src/components/atoms/Input",
+      "docsBuiltAgainstHash": "dc25be8df82d1ca3"
+    },
+    {
+      "name": "Footer",
+      "nodeId": "404:84",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=404-84&m=dev",
+      "figmaHash": "f93bac8f59f50543",
+      "width": 1480,
+      "height": 978,
+      "variantProps": {},
+      "variants": [
+        {
+          "name": "Footer-Desktop",
+          "nodeId": "376:631",
+          "props": {},
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=376-631&m=dev",
+          "width": 1440,
+          "height": 459
+        },
+        {
+          "name": "Footer-Laptop",
+          "nodeId": "404:85",
+          "props": {},
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=404-85&m=dev",
+          "width": 1024,
+          "height": 459
+        }
+      ],
+      "dependsOn": [
+        "Button",
+        "Input"
+      ],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "f93bac8f59f50543",
+      "builtAt": "2026-09-17T03:51:44.196Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/components/Footer",
+      "docsBuiltAgainstHash": "f93bac8f59f50543"
+    },
+    {
+      "name": "Navigation Bar",
+      "nodeId": "402:67",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=402-67&m=dev",
+      "figmaHash": "a0b92490b3f00eec",
+      "width": 1475,
+      "height": 250,
+      "variantProps": {},
+      "variants": [
+        {
+          "name": "Navigation-Desktop",
+          "nodeId": "367:8",
+          "props": {},
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=367-8&m=dev",
+          "width": 1440,
+          "height": 95
+        },
+        {
+          "name": "Navigation-Laptop",
+          "nodeId": "402:68",
+          "props": {},
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=402-68&m=dev",
+          "width": 1024,
+          "height": 95
+        }
+      ],
+      "dependsOn": [
+        "Button"
+      ],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "a0b92490b3f00eec",
+      "builtAt": "2026-09-17T03:54:12.165Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/components/NavigationBar",
+      "docsBuiltAgainstHash": "a0b92490b3f00eec"
+    },
+    {
+      "name": "Product Card",
+      "nodeId": "5:162",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-162&m=dev",
+      "figmaHash": "5706d61ecf20d5f0",
+      "width": 1028,
+      "height": 434,
+      "variantProps": {
+        "State": [
+          "Default",
+          "Hover",
+          "Disabled"
+        ]
+      },
+      "variants": [
+        {
+          "name": "State=Default",
+          "nodeId": "5:159",
+          "props": {
+            "State": "Default"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-159&m=dev",
+          "width": 300,
+          "height": 370
+        },
+        {
+          "name": "State=Hover",
+          "nodeId": "5:160",
+          "props": {
+            "State": "Hover"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-160&m=dev",
+          "width": 300,
+          "height": 370
+        },
+        {
+          "name": "State=Disabled",
+          "nodeId": "5:161",
+          "props": {
+            "State": "Disabled"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=5-161&m=dev",
+          "width": 300,
+          "height": 370
+        }
+      ],
+      "dependsOn": [],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "5706d61ecf20d5f0",
+      "builtAt": "2026-09-17T03:58:25.490Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/components/ProductCard",
+      "docsBuiltAgainstHash": "5706d61ecf20d5f0"
+    },
+    {
+      "name": "Search Bar",
+      "nodeId": "422:1413",
+      "page": "Components",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=422-1413&m=dev",
+      "figmaHash": "63b54098c99a42ac",
+      "width": 614,
+      "height": 200,
+      "variantProps": {
+        "Property 1": [
+          "Default"
+        ]
+      },
+      "variants": [
+        {
+          "name": "Property 1=Default",
+          "nodeId": "410:637",
+          "props": {
+            "Property 1": "Default"
+          },
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=410-637&m=dev",
+          "width": 574,
+          "height": 70
+        },
+        {
+          "name": "Focus",
+          "nodeId": "422:1414",
+          "props": {},
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=422-1414&m=dev",
+          "width": 574,
+          "height": 70
+        }
+      ],
+      "dependsOn": [],
+      "description": "",
+      "codeStatus": "created",
+      "builtAgainstHash": "63b54098c99a42ac",
+      "builtAt": "2026-09-17T04:04:28.770Z",
+      "builtWithModel": "claude-sonnet-5",
+      "targetDir": "src/components/atoms/SearchBar",
+      "docsBuiltAgainstHash": "63b54098c99a42ac"
+    }
+  ]
+}

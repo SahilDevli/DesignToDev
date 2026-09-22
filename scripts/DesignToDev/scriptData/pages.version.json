@@ -1,0 +1,153 @@
+{
+  "figmaFileKey": "0fNPEupARJhWxly5BBWOno",
+  "canvas": "Frames",
+  "figmaVersion": "2397488678334303116",
+  "lastModified": "2026-09-10T06:48:43Z",
+  "updatedAt": "2026-09-16T10:38:34.642Z",
+  "pages": [
+    {
+      "name": "Home Page",
+      "identifier": "HomePage",
+      "nodeId": "409:186",
+      "canvas": "Frames",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=409-186&m=dev",
+      "figmaHash": "a06811aaed661ea0",
+      "width": 1482,
+      "height": 3802,
+      "isVariantSet": true,
+      "screenSource": "single",
+      "screens": [
+        {
+          "name": "Home Page-Desktop",
+          "nodeId": "376:556",
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=376-556&m=dev",
+          "width": 1440,
+          "height": 3760,
+          "breakpoint": "desktop",
+          "media": "(min-width: 1440px) and (max-width: 1919px)",
+          "props": {}
+        }
+      ],
+      "dependsOn": [
+        {
+          "name": "Product Card",
+          "identifier": "ProductCard",
+          "importPath": "../../components/ProductCard/ProductCard",
+          "uses": 4
+        },
+        {
+          "name": "Button",
+          "identifier": "Button",
+          "importPath": "../../components/atoms/Button/Button",
+          "uses": 2
+        },
+        {
+          "name": "Footer",
+          "identifier": "Footer",
+          "importPath": "../../components/Footer/Footer",
+          "uses": 1
+        },
+        {
+          "name": "Input",
+          "identifier": "Input",
+          "importPath": "../../components/atoms/Input/Input",
+          "uses": 1
+        },
+        {
+          "name": "Navigation Bar",
+          "identifier": "NavigationBar",
+          "importPath": "../../components/NavigationBar/NavigationBar",
+          "uses": 1
+        }
+      ],
+      "bespokeSections": [
+        "Home Page-Desktop (COMPONENT, 1440×3760) — layout is bespoke, but it CONTAINS Footer×1, Input×1, Button×2, Product Card×4, Navigation Bar×1: import those, do not rebuild them"
+      ],
+      "description": "",
+      "fetchedAt": "2026-09-16T10:38:30.148Z",
+      "codeStatus": "created",
+      "builtAgainstHash": "a06811aaed661ea0",
+      "builtAt": "2026-09-17T04:55:06.966Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/pages/HomePage",
+      "docsBuiltAgainstHash": "a06811aaed661ea0"
+    },
+    {
+      "name": "Product Page",
+      "identifier": "ProductPage",
+      "nodeId": "409:446",
+      "canvas": "Frames",
+      "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=409-446&m=dev",
+      "figmaHash": "3a81020bb66f4ab5",
+      "width": 1440,
+      "height": 3530,
+      "isVariantSet": false,
+      "screenSource": "single",
+      "screens": [
+        {
+          "name": "Product Page",
+          "nodeId": "409:446",
+          "figmaUrl": "https://www.figma.com/design/0fNPEupARJhWxly5BBWOno/design?node-id=409-446&m=dev",
+          "width": 1440,
+          "height": 3530,
+          "breakpoint": "desktop",
+          "media": "(min-width: 1440px) and (max-width: 1919px)",
+          "props": {}
+        }
+      ],
+      "dependsOn": [
+        {
+          "name": "Product Card",
+          "identifier": "ProductCard",
+          "importPath": "../../components/ProductCard/ProductCard",
+          "uses": 16
+        },
+        {
+          "name": "Button",
+          "identifier": "Button",
+          "importPath": "../../components/atoms/Button/Button",
+          "uses": 4
+        },
+        {
+          "name": "Navigation Bar",
+          "identifier": "NavigationBar",
+          "importPath": "../../components/NavigationBar/NavigationBar",
+          "uses": 1
+        },
+        {
+          "name": "Search Bar",
+          "identifier": "SearchBar",
+          "importPath": "../../components/atoms/SearchBar/SearchBar",
+          "uses": 1
+        },
+        {
+          "name": "Footer",
+          "identifier": "Footer",
+          "importPath": "../../components/Footer/Footer",
+          "uses": 1
+        },
+        {
+          "name": "Input",
+          "identifier": "Input",
+          "importPath": "../../components/atoms/Input/Input",
+          "uses": 1
+        }
+      ],
+      "bespokeSections": [
+        "Home Tech Collection (TEXT, 510×82)",
+        "Product List (GROUP, 1299×790) — layout is bespoke, but it CONTAINS Product Card×8: import those, do not rebuild them",
+        "Product List (GROUP, 1299×790) — layout is bespoke, but it CONTAINS Product Card×8: import those, do not rebuild them",
+        "Product Add (GROUP, 1404×424) — layout is bespoke, but it CONTAINS Button×2: import those, do not rebuild them",
+        "Fine Furnishings (TEXT, 413×82)"
+      ],
+      "description": "",
+      "fetchedAt": "2026-09-16T10:38:34.633Z",
+      "codeStatus": "created",
+      "builtAgainstHash": "3a81020bb66f4ab5",
+      "builtAt": "2026-09-18T04:55:46.777Z",
+      "builtWithModel": "claude-opus-5",
+      "targetDir": "src/pages/ProductPage",
+      "docsBuiltAgainstHash": "3a81020bb66f4ab5"
+    }
+  ]
+}

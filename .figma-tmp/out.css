@@ -1,0 +1,325 @@
+@charset "UTF-8";
+/* HomePage — values taken from Figma node 376:556 ("Home Page-Desktop", COMPONENT, 1440×3760).
+   The frame uses no auto-layout: every band is placed on absolute coordinates, so the ≥1440px
+   rules reproduce those coordinates verbatim (page-relative = Figma x + 623, y + 402).
+   Below 1440px the same DOM reflows fluidly — see HomePage.md "Assumptions".
+   Tokens from src/designToken.css are used wherever the Figma value matches one exactly. */
+/* Figma fills with no matching design token */
+/* Figma frame geometry */
+/* Horizontal insets Figma draws: 34px for the two section headings and the card row,
+   104px for the review rows. */
+.homePage {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%; /* viewport minus scrollbar — never 100vw */
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--colors-neutral-100);
+}
+.homePage *,
+.homePage *::before,
+.homePage *::after {
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------------- navigation */
+/* The bar and the poster share the same origin in Figma (both start at the frame's top-left),
+   so the bar is layered over the hero image instead of sitting above it. It keeps its own
+   translucent fill and backdrop blur from the NavigationBar component. */
+.homePage__nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.homePage__main {
+  display: block;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------- hero */
+.homePage__hero {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 617px;
+  /* Figma places the title box at y 139 — clear of the 95px bar above it. */
+  padding: 139px 34px 0;
+  background: url("../../assets/HomePage/hero-background.jpg") center/cover no-repeat;
+}
+
+.homePage__heroTitle {
+  max-width: 1148px; /* Figma "Title" box width */
+  margin: 0;
+  color: var(--colors-neutral-200); /* rgba(249,243,225,1) */
+  font-family: "Instrument Serif", "Times New Roman", Georgia, serif;
+  font-size: 128px;
+  font-weight: 400;
+  line-height: 166px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- explore products */
+.homePage__products {
+  width: 100%;
+}
+
+.homePage__productsHeader {
+  max-width: 1440px;
+  margin-inline: auto;
+  /* Figma: poster ends at 617, heading starts at 694. */
+  padding: 77px 34px 0;
+}
+
+.homePage__sectionTitle {
+  margin: 0;
+  color: var(--colors-neutral-900); /* rgba(44,44,44,1) */
+  font-family: "Instrument Serif", "Times New Roman", Georgia, serif;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: 83px;
+}
+
+/* Full-bleed grey band — Figma rect 1440×579 starting at y 824. */
+.homePage__productsBand {
+  width: 100%;
+  margin-top: 47px;
+  padding-block: 102px 107px;
+  background: #f2f2f2;
+}
+
+.homePage__productGrid {
+  display: grid;
+  /* Four 300px cards spread across the 1372px content box — Figma gap 57. */
+  grid-template-columns: repeat(4, 300px);
+  justify-content: space-between;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 34px;
+  list-style: none;
+}
+
+.homePage__productItem {
+  display: flex;
+  justify-content: center;
+}
+
+/* ---------------------------------------------------------------- product reviews */
+.homePage__reviews {
+  width: 100%;
+  /* Figma: band ends at 1403, heading starts at 1485. */
+  padding-top: 82px;
+}
+
+.homePage__reviewsHeader {
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 34px;
+}
+
+.homePage__reviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 90px; /* Figma leaves 90px between the three rows */
+  max-width: 1440px;
+  /* Figma: heading starts at 1485, first row at 1662. */
+  margin: 94px auto 0;
+  padding-inline: 104px;
+}
+
+/* One review row: photo and grey quote panel side by side, 1232px wide in Figma.
+   The `fr` ratio keeps the 510 / 673 split proportional at every width. */
+.homePage__review {
+  display: grid;
+  grid-template-columns: 510fr 673fr;
+  gap: 49px;
+  min-height: 435px;
+  margin: 0;
+}
+
+.homePage__review--reversed {
+  grid-template-columns: 673fr 510fr;
+}
+
+.homePage__reviewImage {
+  grid-row: 1;
+  grid-column: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 435px;
+  object-fit: cover;
+}
+
+.homePage__review--reversed .homePage__reviewImage {
+  grid-column: 2;
+}
+
+/* Figma gives each photo its own corner radius. */
+.homePage__reviewImage--speaker {
+  border-radius: 39px;
+}
+
+.homePage__reviewImage--headphones {
+  border-radius: 30px;
+}
+
+.homePage__reviewImage--bed {
+  border-radius: var(--radius-6); /* 24px */
+}
+
+.homePage__reviewPanel {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 47px 46px 28px 57px;
+  background: #d9d9d9;
+  border-radius: 25px;
+}
+
+.homePage__review--reversed .homePage__reviewPanel {
+  grid-column: 1;
+}
+
+.homePage__reviewQuotes {
+  display: flex;
+  flex-direction: column;
+  /* Figma separates the paragraphs with one empty line of the same leading. */
+  gap: 42px;
+}
+
+.homePage__reviewQuote {
+  max-width: 560px; /* Figma quote text box */
+  margin: 0;
+  color: var(--colors-neutral-900);
+  font-family: "Instrument Serif", "Times New Roman", Georgia, serif;
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 42px;
+}
+
+.homePage__reviewAuthor {
+  align-self: flex-end;
+  margin: 0;
+  color: var(--colors-neutral-900);
+  font-family: "Instrument Serif", "Times New Roman", Georgia, serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 52px;
+}
+
+.homePage__reviewCite {
+  font-style: normal;
+}
+
+/* ---------------------------------------------------------------- footer */
+.homePage__footer {
+  /* Figma: last review row ends at 3147, footer starts at 3299. */
+  margin-top: 152px;
+}
+
+/* ================================================================ responsive
+   Figma only draws this page at 1440px. Everything below is authored here — the vw
+   coefficients are the Figma value ÷ 1440, so each clamp lands on the design value at
+   1440px and shrinks proportionally from there. */
+/* --- everything narrower than the design: fluid type and vertical rhythm --- */
+@media (max-width: 1439px) {
+  .homePage__hero {
+    height: clamp(380px, 42.85vw, 617px);
+    /* Floor keeps the title clear of the 95px bar layered above it. */
+    padding-top: clamp(119px, 9.65vw, 139px);
+    padding-inline: clamp(1rem, 2.4vw, 34px);
+  }
+  .homePage__heroTitle {
+    font-size: clamp(2.25rem, 8.9vw, 128px);
+    line-height: 1.3;
+  }
+  .homePage__sectionTitle {
+    font-size: clamp(2rem, 4.45vw, 64px);
+    line-height: 1.3;
+  }
+  .homePage__productsHeader,
+  .homePage__productGrid,
+  .homePage__reviewsHeader {
+    padding-inline: clamp(1rem, 2.4vw, 34px);
+  }
+  .homePage__productsHeader {
+    padding-top: clamp(2.5rem, 5.35vw, 77px);
+  }
+  .homePage__productsBand {
+    margin-top: clamp(1.5rem, 3.27vw, 47px);
+    padding-block: clamp(3rem, 7.09vw, 102px) clamp(3rem, 7.43vw, 107px);
+  }
+  /* auto-fit reflows the row 4-up → 3-up → 2-up → 1-up as the content box narrows. */
+  .homePage__productGrid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 300px));
+    justify-content: center;
+    gap: var(--spacing-10); /* 28px */
+  }
+  .homePage__reviews {
+    padding-top: clamp(3rem, 5.7vw, 82px);
+  }
+  .homePage__reviewList {
+    gap: clamp(2.5rem, 6.25vw, 90px);
+    margin-top: clamp(2rem, 6.53vw, 94px);
+    padding-inline: clamp(1rem, 7.22vw, 104px);
+  }
+  .homePage__review {
+    gap: clamp(1.5rem, 3.4vw, 49px);
+  }
+  .homePage__reviewPanel {
+    padding: clamp(1.25rem, 3.26vw, 47px) clamp(1.25rem, 3.19vw, 46px) clamp(1.25rem, 1.94vw, 28px) clamp(1.25rem, 3.96vw, 57px);
+  }
+  .homePage__reviewQuotes {
+    gap: clamp(1rem, 2.91vw, 42px);
+  }
+  .homePage__reviewQuote {
+    font-size: clamp(1.125rem, 2.22vw, 32px);
+    line-height: 1.3125;
+  }
+  .homePage__reviewAuthor {
+    font-size: clamp(1.25rem, 2.77vw, 40px);
+    line-height: 1.3;
+  }
+  .homePage__footer {
+    margin-top: clamp(3.5rem, 10.55vw, 152px);
+  }
+}
+/* --- tablet and mobile: the two-column review rows stack --- */
+@media (max-width: 1023px) {
+  .homePage__hero {
+    /* The bar wraps to two rows below 1024px, so the title needs more clearance. */
+    padding-top: 152px;
+  }
+  .homePage__review,
+  .homePage__review--reversed {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .homePage__reviewImage,
+  .homePage__review--reversed .homePage__reviewImage {
+    grid-row: 1;
+    grid-column: 1;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 510/435; /* the Figma photo box ratio */
+  }
+  .homePage__reviewPanel,
+  .homePage__review--reversed .homePage__reviewPanel {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  .homePage__reviewQuote {
+    max-width: none;
+  }
+}
+/* --- mobile only --- */
+@media (max-width: 767px) {
+  .homePage__reviewAuthor {
+    align-self: flex-start;
+  }
+}

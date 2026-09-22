@@ -1,0 +1,55 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as NavigationBarStories from './NavigationBar.stories';
+
+<Meta of={NavigationBarStories} />
+
+# Navigation Bar
+
+The full-width Blue Sea Global top bar, with the brand logo, the main site links and a Login button. Use it once at the top of every page, usually over a hero image. The bar is 10% white with a background blur.
+
+<Canvas of={NavigationBarStories.Desktop} />
+
+<Controls />
+
+## Variants
+
+### Screen size
+
+There are no variant props. Sizes switch with CSS media queries.
+
+**Desktop** (1440×95, 1440px and wider): 43px logo, 22px links.
+
+<Canvas of={NavigationBarStories.Desktop} />
+
+**Laptop** (1024×95, 1024–1439px): 40px logo, 18px links, tighter link spacing.
+
+<Canvas of={NavigationBarStories.Laptop} />
+
+## Usage
+
+```tsx
+import { NavigationBar } from '../components/NavigationBar/NavigationBar';
+
+<NavigationBar onLogin={() => openLoginDialog()} />
+```
+
+## Responsive
+
+- 1024px and wider: one 95px row with the logo on the left, the links in the middle and Login on the right.
+- Under 1024px: the height becomes auto. The logo and Login stay on the first row, and the links wrap onto a full-width second row. Padding and font sizes scale with `clamp()` down to 375px.
+
+## Accessibility
+
+- The root is a `<header>` (`banner` landmark). The links sit in `<nav aria-label="Primary">` as a list of real `<a>` elements.
+- The logo is a link to `#home`.
+- The links and logo show a focus-visible outline. Tab order is logo, Home, Products, Trend, Help & Support, then Login.
+- Login is a native `<button>` (the shared `Button`), so Enter or Space activates it.
+
+## Assumptions
+
+- Figma stacks the link text layers in one grid cell. The code uses a flex row that keeps Figma's box widths and gaps.
+- The links point to hash anchors because the Figma text is static.
+- The link hover underline is not in Figma.
+- The layout below 1024px is not in Figma, and there is no hamburger menu (see Responsive).
+- The background `rgba(255, 255, 255, 0.1)` has no matching token.
+- Instrument Serif and Instrument Sans are not loaded in this repo, so fallback fonts render.

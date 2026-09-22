@@ -1,0 +1,109 @@
+.input {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-3);
+  width: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.input__label {
+  width: 100%;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--colors-neutral-500);
+  transition: color 0.15s ease;
+}
+
+.input__box {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 42px;
+  padding: calc(10px - var(--stroke-1)) calc(14px - var(--stroke-1));
+  border: var(--stroke-1) solid var(--colors-neutral-200);
+  border-radius: var(--radius-2);
+  background-color: var(--colors-neutral-100);
+  overflow: hidden;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease;
+
+  @media (max-width: 767px) {
+    min-height: 44px;
+  }
+}
+
+.input__field {
+  box-sizing: border-box;
+  flex: 1 0 0;
+  min-width: 0;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--colors-neutral-900);
+
+  &::placeholder {
+    color: var(--colors-neutral-500);
+  }
+}
+
+.input__error {
+  width: 100%;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--colors-accent-900);
+}
+
+.input--active {
+  .input__label {
+    color: var(--colors-primary-400);
+  }
+
+  .input__box {
+    border: var(--stroke-2) solid var(--colors-primary-400);
+    padding: calc(10px - var(--stroke-2)) calc(14px - var(--stroke-2));
+  }
+}
+
+.input--disabled {
+  opacity: 0.6;
+
+  .input__box {
+    border-color: var(--colors-neutral-300);
+    background-color: var(--colors-neutral-200);
+  }
+
+  .input__field {
+    cursor: not-allowed;
+    color: var(--colors-neutral-200);
+
+    &::placeholder {
+      color: var(--colors-neutral-200);
+    }
+  }
+}
+
+.input--error {
+  .input__label {
+    color: var(--colors-accent-900);
+  }
+
+  .input__box {
+    border: 1.5px solid var(--colors-accent-900);
+    padding: calc(10px - 1.5px) calc(14px - 1.5px);
+    background-color: var(--colors-neutral-300);
+  }
+}

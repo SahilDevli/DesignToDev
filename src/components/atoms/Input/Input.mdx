@@ -1,0 +1,63 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as InputStories from './Input.stories';
+
+<Meta of={InputStories} />
+
+# Input
+
+A single-line labeled text field with built-in filled, focus, disabled and error styling. Use it
+for any form field where the surrounding page owns validation and controls the value.
+
+<Canvas of={InputStories.Default} />
+<Controls />
+
+## Variants
+
+### State
+
+<Canvas of={InputStories.Default} />
+<Canvas of={InputStories.Filled} />
+<Canvas of={InputStories.Active} />
+<Canvas of={InputStories.Disabled} />
+<Canvas of={InputStories.Error} />
+
+## Usage
+
+```tsx
+import { Input } from '../../components/atoms/Input/Input';
+
+<Input label="Email" placeholder="you@example.com" onChange={handleChange} />
+<Input label="Email" errorMessage="Enter a valid email" value={email} onChange={handleChange} />
+```
+
+## Responsive
+
+The root wrapper is `width: 100%`, so the field fills its container from 375px mobile up through
+1920px instead of staying pinned to Figma's 280px frame. Below 768px the input box gets
+`min-height: 44px` to meet the WCAG 2.5.5 touch-target guideline; the design's 42px height is used
+from tablet up.
+
+## Accessibility
+
+- The label is a real `<label htmlFor>` linked to the input's `id` (auto-generated via `useId` if
+  no `id` prop is passed).
+- `disabled` (or `state="disabled"`) sets both the native `disabled` attribute and
+  `aria-disabled="true"`, and blocks focus/change handlers.
+- The error state sets `aria-invalid="true"` and `aria-describedby` pointing at the visible error
+  message paragraph.
+- Focus, typing and disabling are real browser/DOM behavior (`onFocus`/`onBlur`/`onChange`/
+  `disabled`), so keyboard and assistive-tech interaction work without extra JavaScript.
+
+## Assumptions
+
+- **Root width:** the root wrapper uses `width: 100%` instead of Figma's fixed 280px so the field
+  fills whatever container it's placed in, while still measuring exactly 280px in a 280px
+  container.
+- **State precedence when unforced:** `disabled` > `error` > `active` (focused) > `filled` (has a
+  value) > `default` — focusing a field that already has an `errorMessage` keeps the error style.
+- **Filled/Active/Error text color** comes from real `::placeholder` vs. value color rather than a
+  per-state override, matching how Figma's own "value" text reads as placeholder-style in
+  Default/Active and as real typed content in Filled/Error.
+- The 1.5px error border and 2px active border (`strokeAlign: INSIDE` in Figma) each subtract
+  their own width from the 14px/10px padding so the box stays 42px tall in every state.
+- Below 768px the input box gets `min-height: 44px` for the WCAG 2.5.5 touch-target guideline.

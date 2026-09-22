@@ -1,0 +1,65 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks';
+import * as SearchBarStories from './SearchBar.stories';
+
+<Meta of={SearchBarStories} />
+
+# SearchBar
+
+A pill-shaped search field with a circular submit button. Use it as the primary search entry
+point on a page header or listings toolbar.
+
+<Canvas of={SearchBarStories.Default} />
+<Controls />
+
+## Variants
+
+### State
+
+<Canvas of={SearchBarStories.Default} />
+<Canvas of={SearchBarStories.Focus} />
+
+## Usage
+
+```tsx
+import { SearchBar } from '../../components/atoms/SearchBar/SearchBar';
+
+<SearchBar placeholder="search here" onSearch={(value) => runSearch(value)} />
+<SearchBar value={query} onChange={(e) => setQuery(e.target.value)} onSearch={runSearch} />
+```
+
+## Responsive
+
+The root `<form>` is `width: 100%`, so the bar fills its container from 375px mobile up through
+1920px instead of staying pinned to Figma's 574px frame. Below 768px the height shrinks from 70px
+to 56px, the circular button from 65px to 48px (still above the 44px WCAG 2.5.5 touch-target
+minimum), the icon from 22px to 18px, the field's font-size from 22px to 16px, and the left padding
+from 31px to the `--spacing-8` (20px) token. From tablet width up, the design's exact 574px-frame
+values apply unchanged.
+
+## Accessibility
+
+- The root is a real `<form role="search">`; submitting it (search button click or Enter key in the
+  field) calls `onSearch(value)` and prevents the native page navigation.
+- The `<input type="search">` has a visually-hidden `<label>` ("Search") providing an accessible
+  name, in addition to the visible "search here" placeholder copy from the design.
+- The submit button is a real `<button type="submit" aria-label="Search">` with a visible
+  `:focus-visible` outline; its icon is `aria-hidden`.
+- Focus is real browser/DOM behavior (`onFocus`/`onBlur`), so keyboard and assistive-tech
+  interaction work without extra JavaScript.
+
+## Assumptions
+
+- **Root width:** Figma's frame is a fixed 574px, but the root uses `width: 100%` so the bar fills
+  whatever container it's placed in, while still measuring exactly 574px in a 574px container.
+- **Accessible name:** Figma shows "search here" as static copy inside the field with no separate
+  label; it's implemented as the input's placeholder plus a visually-hidden `<label>`.
+- **Submit behavior:** Figma has no prototype interaction wired on the search button, so submitting
+  calls `onSearch(value)` — the conventional accessible pattern for a search field's button.
+- **White circle button:** the Figma "search button" layer is a flat white circle with no additional
+  detail, so it's built with `border-radius: 50%` and the `neutral-100` token rather than committing
+  a redundant SVG asset for a plain circle.
+- **Search icon recolor:** the Default (`#2A2A2A`) and Focus (`#3262AB`) icon layers in Figma are the
+  identical glyph in two flat colors, so a single exported SVG is reused as a CSS `mask` and
+  recolored per state via `background-color` instead of committing two near-duplicate assets.
+- **Font:** Figma specifies Instrument Sans, which isn't loaded anywhere in this project (same as
+  the existing `Input`/`Button` atoms), so the field falls back to the project's system font stack.
